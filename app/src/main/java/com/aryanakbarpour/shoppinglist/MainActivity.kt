@@ -16,10 +16,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.aryanakbarpour.shoppinglist.ui.screens.CreateListScreen
-import com.aryanakbarpour.shoppinglist.ui.screens.MainListScreen
-import com.aryanakbarpour.shoppinglist.ui.screens.Screen
-import com.aryanakbarpour.shoppinglist.ui.screens.ViewListScreen
+import com.aryanakbarpour.shoppinglist.ui.screens.*
 import com.aryanakbarpour.shoppinglist.ui.theme.ShoppingListTheme
 import com.aryanakbarpour.shoppinglist.viewmodel.ShoppingListViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -40,7 +37,10 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val navController = rememberNavController()
 
-                    NavHost(navController = navController, startDestination = Screen.MainListScreen.route) {
+                    NavHost(navController = navController, startDestination = Screen.LoginScreen.route) {
+                        composable(Screen.LoginScreen.route) {
+                            LoginScreen()
+                        }
                         composable(Screen.MainListScreen.route) {
                             MainListScreen(navController = navController, shoppingListViewModel= shoppingListViewModel)
                         }

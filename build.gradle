@@ -5,6 +5,10 @@ buildscript {
         hilt_version = "2.44"
         wear_compose_version = '1.0.0-alpha18'
     }
+    dependencies {// Add the dependency for the Google services Gradle plugin
+        classpath 'com.google.gms:google-services:4.3.13'
+
+    }
 
 }// Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
