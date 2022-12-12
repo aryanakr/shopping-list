@@ -29,6 +29,7 @@ import com.aryanakbarpour.shoppinglist.ui.theme.Primary
 import com.aryanakbarpour.shoppinglist.ui.theme.PrimaryDark
 import com.aryanakbarpour.shoppinglist.ui.theme.PrimaryLight
 import com.aryanakbarpour.shoppinglist.viewmodel.ShoppingListViewModelInterface
+import com.aryanakbarpour.shoppinglist.viewmodel.getTestShoppingListViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
@@ -171,26 +172,6 @@ fun SectionHeader(title: String) {
 fun MainScreenPreview() {
     MainListScreen(
         navController = NavController(LocalContext.current),
-        shoppingListViewModel = object : ShoppingListViewModelInterface {
-            override val shoppingListsFlow: Flow<List<ShoppingListWithItems>>
-                get() = flowOf(
-                    listOf(
-                        ShoppingListWithItems(ShoppingList(1, "test"), listOf(ShoppingItem(name = "test item 1", quantity = 3.0, unit = "kg"), ShoppingItem(name = "test item 2", quantity = 2.0, unit = "kg"))),
-                        ShoppingListWithItems(ShoppingList(2, "test2"), listOf(ShoppingItem(name = "test item 1", quantity = 3.0, unit = "kg"), ShoppingItem(name = "test item 2", quantity = 2.0, unit = "kg"))),
-                        ShoppingListWithItems(ShoppingList(3, "test3"), listOf(ShoppingItem(name = "test item 1", quantity = 3.0, unit = "kg"), ShoppingItem(name = "test item 2", quantity = 2.0, unit = "kg")))
-                    )
-                )
-
-            override fun addShoppingList(shoppingList: ShoppingListWithItems) {return }
-
-            override fun updateShoppingList(shoppingList: ShoppingListWithItems) {}
-
-            override fun deleteShoppingList(shoppingList: ShoppingListWithItems) {}
-
-            override fun deleteShoppingListItems(shoppingList: ShoppingListWithItems) {}
-
-            override fun toggleShoppingListActiveState(shoppingList: ShoppingListWithItems) {}
-
-        }
+        shoppingListViewModel = getTestShoppingListViewModel()
     )
 }

@@ -10,6 +10,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -94,4 +95,35 @@ class ShoppingListViewModel @Inject internal constructor(private val repository:
         }
     }
 
+}
+
+fun getTestShoppingListViewModel() : ShoppingListViewModelInterface {
+    return object : ShoppingListViewModelInterface {
+        override val shoppingListsFlow: Flow<List<ShoppingListWithItems>>
+            get() = flowOf(
+                listOf(
+                    ShoppingListWithItems(ShoppingList(1, "test"), listOf(ShoppingItem(name = "test item 1", quantity = 3.0, unit = "kg"), ShoppingItem(name = "test item 2", quantity = 2.0, unit = "kg"))),
+                    ShoppingListWithItems(ShoppingList(2, "test2"), listOf(ShoppingItem(name = "test item 1", quantity = 3.0, unit = "kg"), ShoppingItem(name = "test item 2", quantity = 2.0, unit = "kg"))),
+                    ShoppingListWithItems(ShoppingList(3, "test3"), listOf(ShoppingItem(name = "test item 1", quantity = 3.0, unit = "kg"), ShoppingItem(name = "test item 2", quantity = 2.0, unit = "kg")))
+                )
+            )
+
+        override fun addShoppingList(shoppingList: ShoppingListWithItems) {return }
+
+        override fun updateShoppingList(shoppingList: ShoppingListWithItems) {}
+
+        override fun deleteShoppingList(shoppingList: ShoppingListWithItems) {}
+
+        override fun deleteShoppingListItems(shoppingList: ShoppingListWithItems) {}
+
+        override fun toggleShoppingListActiveState(shoppingList: ShoppingListWithItems) {}
+        override fun updateShoppingItem(shoppingItem: ShoppingItem) {
+            TODO("Not yet implemented")
+        }
+
+        override fun archiveList(shoppingList: ShoppingListWithItems) {
+            TODO("Not yet implemented")
+        }
+
+    }
 }
