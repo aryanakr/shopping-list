@@ -25,11 +25,14 @@ import com.aryanakbarpour.shoppinglist.model.CollectionStatus
 import com.aryanakbarpour.shoppinglist.model.ShoppingItem
 import com.aryanakbarpour.shoppinglist.model.ShoppingList
 import com.aryanakbarpour.shoppinglist.model.ShoppingListWithItems
+import com.aryanakbarpour.shoppinglist.service.remote.AuthViewModel
 import com.aryanakbarpour.shoppinglist.ui.theme.Primary
 import com.aryanakbarpour.shoppinglist.ui.theme.PrimaryDark
 import com.aryanakbarpour.shoppinglist.ui.theme.PrimaryLight
 import com.aryanakbarpour.shoppinglist.viewmodel.ShoppingListViewModelInterface
 import com.aryanakbarpour.shoppinglist.viewmodel.getTestShoppingListViewModel
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
@@ -38,16 +41,17 @@ fun MainListScreen(
     navController: NavController,
     shoppingListViewModel: ShoppingListViewModelInterface
 ) {
+
     val shoppingListsState = shoppingListViewModel.shoppingListsFlow.collectAsState(initial = listOf())
 
     Scaffold(
         topBar = { TopAppBar(
             title = { Text(text ="Shopping Lists")},
             actions = {
-                IconButton(onClick = { /*TODO*/ }) {
+                IconButton(onClick = { shoppingListViewModel.test() }) {
                     Icon(Icons.Filled.Refresh, contentDescription = "Add new list")
                 }
-                IconButton(onClick = { /*TODO*/ }) {
+                IconButton(onClick = { Firebase.auth.signOut() }) {
                     Icon(Icons.Filled.Add, contentDescription = "Add new list")
                 }
             },
@@ -62,6 +66,7 @@ fun MainListScreen(
         }
         ) {
         Box(modifier = Modifier
+            .padding(it)
             .background(
                 brush = Brush.verticalGradient(
                     colors = listOf(

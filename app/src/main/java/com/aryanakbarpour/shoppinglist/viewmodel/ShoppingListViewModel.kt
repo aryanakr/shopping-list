@@ -1,10 +1,13 @@
 package com.aryanakbarpour.shoppinglist.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.aryanakbarpour.shoppinglist.model.ShoppingItem
 import com.aryanakbarpour.shoppinglist.model.ShoppingList
 import com.aryanakbarpour.shoppinglist.model.ShoppingListWithItems
 import com.aryanakbarpour.shoppinglist.service.ShoppingListRepository
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -13,6 +16,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import javax.inject.Named
 
 interface ShoppingListViewModelInterface {
     val shoppingListsFlow: Flow<List<ShoppingListWithItems>>
@@ -25,6 +29,8 @@ interface ShoppingListViewModelInterface {
 
     fun updateShoppingItem(shoppingItem: ShoppingItem)
     fun archiveList(shoppingList: ShoppingListWithItems)
+
+    fun test()
 }
 
 @HiltViewModel
@@ -95,6 +101,11 @@ class ShoppingListViewModel @Inject internal constructor(private val repository:
         }
     }
 
+    override fun test() {
+        val st = if (Firebase.auth.currentUser != null) Firebase.auth.currentUser!!.email else "not logged in"
+        Log.d("kir", "test: $st")
+    }
+
 }
 
 fun getTestShoppingListViewModel() : ShoppingListViewModelInterface {
@@ -122,6 +133,10 @@ fun getTestShoppingListViewModel() : ShoppingListViewModelInterface {
         }
 
         override fun archiveList(shoppingList: ShoppingListWithItems) {
+            TODO("Not yet implemented")
+        }
+
+        override fun test() {
             TODO("Not yet implemented")
         }
 

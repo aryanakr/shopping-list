@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Shopping List</string>
+
+    <string name="web_client_id">160436818811-33knusq8tje8f5b7fu2cmdqm8fpqn0f8.apps.googleusercontent.com</string>
+
 </resources>
