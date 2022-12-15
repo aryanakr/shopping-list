@@ -1,7 +1,6 @@
 package com.aryanakbarpour.shoppinglist.service.remote
 
 import com.aryanakbarpour.shoppinglist.model.Response.*
-import com.aryanakbarpour.shoppinglist.util.Constants.USERS
 import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.firebase.auth.FirebaseAuth
@@ -16,8 +15,14 @@ class UserRepositoryImpl @Inject constructor(
     private val db: FirebaseFirestore
 ) : UserRepository {
 
-    override val displayName = auth.currentUser?.displayName.toString()
-    override val photoUrl = auth.currentUser?.photoUrl.toString()
+    override val isAuthenticated: Boolean
+        get() = auth.currentUser != null
+
+    override val userId: String = auth.currentUser?.uid ?: ""
+
+    override val displayName = auth.currentUser?.displayName ?: "Offline User"
+    override val photoUrl = (auth.currentUser?.photoUrl ?: "").toString()
+    override val email = auth.currentUser?.email ?: ""
 
     override suspend fun signOut(): SignOutResponse {
         return try {

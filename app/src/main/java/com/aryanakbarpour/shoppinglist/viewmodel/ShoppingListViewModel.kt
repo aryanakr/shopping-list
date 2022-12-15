@@ -2,6 +2,7 @@ package com.aryanakbarpour.shoppinglist.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import com.aryanakbarpour.shoppinglist.model.AppMode
 import com.aryanakbarpour.shoppinglist.model.ShoppingItem
 import com.aryanakbarpour.shoppinglist.model.ShoppingList
 import com.aryanakbarpour.shoppinglist.model.ShoppingListWithItems
@@ -15,6 +16,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
+import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -24,29 +26,31 @@ interface ShoppingListViewModelInterface {
     fun addShoppingList(shoppingList: ShoppingListWithItems)
     fun updateShoppingList(shoppingList: ShoppingListWithItems)
     fun deleteShoppingList(shoppingList: ShoppingListWithItems)
-    fun deleteShoppingListItems(shoppingList: ShoppingListWithItems)
     fun toggleShoppingListActiveState(shoppingList: ShoppingListWithItems)
 
     fun updateShoppingItem(shoppingItem: ShoppingItem)
     fun archiveList(shoppingList: ShoppingListWithItems)
 
-    fun test()
+    fun getShoppingList(id: String): Flow<ShoppingList>
+    fun getShoppingListItems(listId: String): Flow<List<ShoppingItem>>
+
 }
 
 @HiltViewModel
-class ShoppingListViewModel @Inject internal constructor(private val repository: ShoppingListRepository) : ViewModel(), ShoppingListViewModelInterface {
+class ShoppingListViewModel @Inject internal constructor(
+    private val shoppingRepo: ShoppingListRepository) : ViewModel(), ShoppingListViewModelInterface {
 
     private val ioScope = CoroutineScope(Dispatchers.IO)
 
-    override val shoppingListsFlow: Flow<List<ShoppingListWithItems>> = repository.getAllShoppingListsWithItemsFlow()
+    override val shoppingListsFlow: Flow<List<ShoppingListWithItems>> = shoppingRepo.getAllShoppingListsWithItemsFlow()
 
     override fun addShoppingList(shoppingList: ShoppingListWithItems) {
         ioScope.launch {
-            val shoppingListId = repository.insertShoppingList(shoppingList)
+            val shoppingListId = shoppingRepo.insertShoppingList(shoppingList.shoppingList)
 
             shoppingList.items.forEach {
                 val item = it.copy(listId = shoppingListId)
-                repository.insertShoppingItem(item)
+                shoppingRepo.insertShoppingItem(item)
             }
         }
 
@@ -54,35 +58,31 @@ class ShoppingListViewModel @Inject internal constructor(private val repository:
     override fun updateShoppingList(shoppingList: ShoppingListWithItems) {
         ioScope.launch {
             // update list
-            repository.updateShoppingList(shoppingList)
+            shoppingRepo.updateShoppingList(shoppingList.shoppingList)
 
             // update items
             shoppingList.items.forEach {
-                if (it.id == null) {
-                    val item = it.copy(listId = shoppingList.shoppingList.id!!)
-                    repository.insertShoppingItem(item)
+                if (it.id.isBlank()) {
+                    val item = it.copy(listId = shoppingList.shoppingList.id)
+                    shoppingRepo.insertShoppingItem(item)
                 } else {
-                    repository.updateShoppingItem(it)
+                    shoppingRepo.updateShoppingItem(it)
                 }
             }
         }
     }
     override fun deleteShoppingList(shoppingList: ShoppingListWithItems) {
         ioScope.launch {
-            repository.deleteShoppingList(shoppingList)
+            shoppingRepo.deleteShoppingList(shoppingList)
         }
     }
-    override fun deleteShoppingListItems(shoppingList: ShoppingListWithItems) {
-        ioScope.launch {
-            repository.deleteShoppingListItems(shoppingList)
-        }
-    }
+
 
     override fun toggleShoppingListActiveState(shoppingList: ShoppingListWithItems) {
         ioScope.launch {
             val newList = shoppingList.shoppingList.copy(isActive = !shoppingList.shoppingList.isActive)
             ioScope.launch {
-                repository.updateShoppingList(shoppingList.copy(shoppingList = newList))
+                shoppingRepo.updateShoppingList(newList)
             }
 
         }
@@ -90,20 +90,23 @@ class ShoppingListViewModel @Inject internal constructor(private val repository:
 
     override fun updateShoppingItem(shoppingItem: ShoppingItem) {
         ioScope.launch {
-            repository.updateShoppingItem(shoppingItem)
+            shoppingRepo.updateShoppingItem(shoppingItem)
         }
     }
 
     override fun archiveList(shoppingList: ShoppingListWithItems) {
         ioScope.launch {
             val newList = shoppingList.shoppingList.copy(isClosed = true)
-            repository.updateShoppingList(shoppingList.copy(shoppingList = newList))
+            shoppingRepo.updateShoppingList(newList)
         }
     }
 
-    override fun test() {
-        val st = if (Firebase.auth.currentUser != null) Firebase.auth.currentUser!!.email else "not logged in"
-        Log.d("kir", "test: $st")
+    override fun getShoppingList(id: String): Flow<ShoppingList> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getShoppingListItems(listId: String): Flow<List<ShoppingItem>> {
+        return shoppingRepo.getShoppingListItems(listId)
     }
 
 }
@@ -113,9 +116,9 @@ fun getTestShoppingListViewModel() : ShoppingListViewModelInterface {
         override val shoppingListsFlow: Flow<List<ShoppingListWithItems>>
             get() = flowOf(
                 listOf(
-                    ShoppingListWithItems(ShoppingList(1, "test"), listOf(ShoppingItem(name = "test item 1", quantity = 3.0, unit = "kg"), ShoppingItem(name = "test item 2", quantity = 2.0, unit = "kg"))),
-                    ShoppingListWithItems(ShoppingList(2, "test2"), listOf(ShoppingItem(name = "test item 1", quantity = 3.0, unit = "kg"), ShoppingItem(name = "test item 2", quantity = 2.0, unit = "kg"))),
-                    ShoppingListWithItems(ShoppingList(3, "test3"), listOf(ShoppingItem(name = "test item 1", quantity = 3.0, unit = "kg"), ShoppingItem(name = "test item 2", quantity = 2.0, unit = "kg")))
+                    ShoppingListWithItems(ShoppingList(UUID.randomUUID().toString(), "test"), listOf(ShoppingItem(name = "test item 1", quantity = 3.0, unit = "kg"), ShoppingItem(name = "test item 2", quantity = 2.0, unit = "kg"))),
+                    ShoppingListWithItems(ShoppingList(UUID.randomUUID().toString(), "test2"), listOf(ShoppingItem(name = "test item 1", quantity = 3.0, unit = "kg"), ShoppingItem(name = "test item 2", quantity = 2.0, unit = "kg"))),
+                    ShoppingListWithItems(ShoppingList(UUID.randomUUID().toString(), "test3"), listOf(ShoppingItem(name = "test item 1", quantity = 3.0, unit = "kg"), ShoppingItem(name = "test item 2", quantity = 2.0, unit = "kg")))
                 )
             )
 
@@ -125,7 +128,6 @@ fun getTestShoppingListViewModel() : ShoppingListViewModelInterface {
 
         override fun deleteShoppingList(shoppingList: ShoppingListWithItems) {}
 
-        override fun deleteShoppingListItems(shoppingList: ShoppingListWithItems) {}
 
         override fun toggleShoppingListActiveState(shoppingList: ShoppingListWithItems) {}
         override fun updateShoppingItem(shoppingItem: ShoppingItem) {
@@ -136,7 +138,11 @@ fun getTestShoppingListViewModel() : ShoppingListViewModelInterface {
             TODO("Not yet implemented")
         }
 
-        override fun test() {
+        override fun getShoppingList(id: String): Flow<ShoppingList> {
+            TODO("Not yet implemented")
+        }
+
+        override fun getShoppingListItems(listId: String): Flow<List<ShoppingItem>> {
             TODO("Not yet implemented")
         }
 

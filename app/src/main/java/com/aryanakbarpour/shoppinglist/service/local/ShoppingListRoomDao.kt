@@ -16,10 +16,13 @@ interface ShoppingListRoomDao {
 
     // Shopping list methods
     @Query("SELECT * FROM shopping_list")
-    suspend fun getAll(): List<ShoppingList>
+    suspend fun getShoppingLists(): List<ShoppingList>
+
+    @Query("SELECT * FROM shopping_item WHERE listId = :shoppingListId")
+    fun getShoppingListItems(shoppingListId: String): Flow<List<ShoppingItem>>
 
     @Insert
-    suspend fun insertShoppingList(shoppingList: ShoppingList) : Long
+    suspend fun insertShoppingList(shoppingList: ShoppingList)
 
     @Update
     suspend fun updateShoppingList(shoppingList: ShoppingList)
@@ -28,7 +31,7 @@ interface ShoppingListRoomDao {
     suspend fun deleteShoppingList(shoppingList: ShoppingList)
 
     @Query("DELETE FROM shopping_item WHERE listId = :listId")
-    suspend fun deleteShoppingListItems(listId: Long)
+    suspend fun deleteShoppingListItems(listId: String)
 
     @Transaction
     @Query("SELECT * FROM shopping_list")
@@ -36,7 +39,7 @@ interface ShoppingListRoomDao {
 
     // Shopping item methods
     @Insert
-    suspend fun insertShoppingItem(shoppingItem: ShoppingItem) : Long
+    suspend fun insertShoppingItem(shoppingItem: ShoppingItem)
 
     @Delete
     suspend fun deleteShoppingItem(shoppingItem: ShoppingItem)

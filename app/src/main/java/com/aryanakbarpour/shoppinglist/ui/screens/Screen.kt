@@ -7,7 +7,7 @@ sealed class Screen(val route: String) {
     object EditListScreen: Screen("edit_list_screen")
     object ViewListScreen: Screen("view_list_screen")
 
-    fun withArgs(vararg args: Long): String {
+    fun withArgs(vararg args: String): String {
         return buildString {
             append(route)
             args.forEach { arg ->

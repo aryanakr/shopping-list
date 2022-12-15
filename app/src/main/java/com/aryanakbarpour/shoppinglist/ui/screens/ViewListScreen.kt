@@ -1,6 +1,7 @@
 package com.aryanakbarpour.shoppinglist.ui.screens
 
 import android.graphics.drawable.Icon
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
@@ -36,28 +37,28 @@ import com.aryanakbarpour.shoppinglist.ui.theme.PrimaryLight
 import com.aryanakbarpour.shoppinglist.util.CircleCheckBox
 import com.aryanakbarpour.shoppinglist.util.getBottomLineShape
 import com.aryanakbarpour.shoppinglist.viewmodel.ShoppingListViewModel
+import com.aryanakbarpour.shoppinglist.viewmodel.UserViewModel
 import com.guru.fontawesomecomposelib.FaIcon
 import com.guru.fontawesomecomposelib.FaIcons
 
 
 @Composable
-fun ViewListScreen(navController: NavController, shoppingListViewModel: ShoppingListViewModel, listId: Long?) {
+fun ViewListScreen(
+    navController: NavController,
+    shoppingListViewModel: ShoppingListViewModel,
+    userViewModel: UserViewModel,
+    listId: String) {
 
 
     val shoppingList = shoppingListViewModel.shoppingListsFlow
         .collectAsState(initial = listOf())
         .value.firstOrNull { it.shoppingList.id == listId }
 
-    val items = remember { mutableStateListOf<ShoppingItem>() }
+    val items = shoppingListViewModel.getShoppingListItems(listId).collectAsState(initial = listOf()).value
 
-    val isInitialised = remember { mutableStateOf<Boolean>(false) }
 
     val appBarMenuState = remember { mutableStateOf(false) }
 
-    if (shoppingList != null && isInitialised.value.not()) {
-        items.addAll(shoppingList.items)
-        isInitialised.value = true
-    }
 
     Scaffold (
         topBar = { TopAppBar (
@@ -139,6 +140,7 @@ fun ViewListScreen(navController: NavController, shoppingListViewModel: Shopping
                 )
                 .fillMaxHeight()
                 .fillMaxWidth()
+                .padding(it)
         ) {
             if (shoppingList != null) {
                 Column() {
@@ -148,8 +150,8 @@ fun ViewListScreen(navController: NavController, shoppingListViewModel: Shopping
                         .padding(vertical = 8.dp),
                         contentAlignment = Alignment.Center
                     ) {
-                        val signedItemsCount = shoppingList.items.count { it.collectionStatus != CollectionStatus.NOT_COLLECTED }
-                        Text(text = "$signedItemsCount/${shoppingList.items.size} Items Marked")
+                        val signedItemsCount = items.count { it.collectionStatus != CollectionStatus.NOT_COLLECTED }
+                        Text(text = "$signedItemsCount/${items.size} Items Marked")
                     }
 
                     Box(
@@ -201,8 +203,6 @@ fun ViewListScreen(navController: NavController, shoppingListViewModel: Shopping
                                         setItemStatus = { item: ShoppingItem, status: CollectionStatus ->
                                             val newItem = item.copy(collectionStatus = status)
                                             shoppingListViewModel.updateShoppingItem(newItem)
-
-                                            items[index] = newItem
                                         },
                                         checkSize = checksSize,
                                     )

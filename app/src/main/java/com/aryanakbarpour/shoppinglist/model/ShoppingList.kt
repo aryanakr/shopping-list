@@ -4,7 +4,7 @@ import androidx.room.*
 
 @Entity(tableName = "shopping_list")
 data class ShoppingList (
-    @PrimaryKey(autoGenerate = true) val id: Long? = null,
+    @PrimaryKey val id: String = "",
     val name: String = "",
     val isActive: Boolean = false,
     val isClosed: Boolean = false,

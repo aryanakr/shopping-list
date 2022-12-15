@@ -116,11 +116,4 @@ class AuthModule {
         db = db
     )
 
-    @Provides
-    fun provideShoppingListRepository(shoppingListDao: ShoppingListRoomDao) : ShoppingListRepository {
-        if (Firebase.auth.currentUser == null) {
-            return ShoppingListRepositoryLocalImpl(shoppingListDao)
-        }
-        return ShoppingListRepositoryRemoteImpl()
-    }
 }

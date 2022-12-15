@@ -45,12 +45,13 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.window.Dialog
 import com.aryanakbarpour.shoppinglist.util.getBottomLineShape
+import com.aryanakbarpour.shoppinglist.viewmodel.UserViewModel
 import com.aryanakbarpour.shoppinglist.viewmodel.getTestShoppingListViewModel
 import com.guru.fontawesomecomposelib.FaIcon
 import com.guru.fontawesomecomposelib.FaIcons
 
 @Composable
-fun CreateListScreen(navController: NavController, shoppingListViewModel: ShoppingListViewModelInterface, listId: Long? = null) {
+fun CreateListScreen(navController: NavController, shoppingListViewModel: ShoppingListViewModelInterface, userViewModel: UserViewModel, listId: String? = null) {
 
     val shoppingList =
         shoppingListViewModel.shoppingListsFlow
@@ -72,6 +73,13 @@ fun CreateListScreen(navController: NavController, shoppingListViewModel: Shoppi
         mutableStateOf(
             shoppingList?.shoppingList?.isActive ?: false) }
 
+    val shoppingListItems =
+        if (listId != null )
+            shoppingListViewModel.getShoppingListItems(listId ?: "")
+                .collectAsState(initial = listOf()).value
+        else
+            listOf()
+
     val listItems = remember {mutableStateOf(listOf<ShoppingItem>())}
 
     if (shoppingList != null && !isInitialised.value) {
@@ -80,7 +88,7 @@ fun CreateListScreen(navController: NavController, shoppingListViewModel: Shoppi
 
         val populatedItems = mutableListOf<ShoppingItem>()
         populatedItems.addAll(listItems.value)
-        populatedItems.addAll(shoppingList.items)
+        populatedItems.addAll(shoppingListItems)
 
         listItems.value = populatedItems
 
@@ -102,7 +110,7 @@ fun CreateListScreen(navController: NavController, shoppingListViewModel: Shoppi
             actions = {
                 IconButton(onClick = {
                     val newList = ShoppingList(
-                        id = listId,
+                        id = listId ?: "",
                         name = listNameState.value.text,
                         isActive = activeCheckState.value
                     )
@@ -131,6 +139,7 @@ fun CreateListScreen(navController: NavController, shoppingListViewModel: Shoppi
         Surface (
             color = Color.Transparent,
             modifier = Modifier
+                .padding(it)
                 .background(
                     brush = Brush.verticalGradient(
                         colors = listOf(
@@ -261,14 +270,6 @@ private fun ShoppingItemListItem(item: ShoppingItem, onDeleteCallback: () -> Uni
             Text(text = "${item.quantity} ${item.unit}")
         }
     }
-}
-
-@Preview
-@Composable
-fun CreateListScreenPreview() {
-    CreateListScreen(navController = NavController(LocalContext.current),
-        shoppingListViewModel = getTestShoppingListViewModel()
-    )
 }
 
 @Composable
@@ -410,13 +411,4 @@ fun ShoppingItemAddEditDialog(
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun EditListScreenPreview() {
-    CreateListScreen(navController = NavController(LocalContext.current),
-        shoppingListViewModel = getTestShoppingListViewModel(),
-        listId = 1
-    )
 }

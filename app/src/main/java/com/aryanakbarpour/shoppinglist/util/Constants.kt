@@ -8,4 +8,6 @@ object Constants {
 
     // Firebase Collections
     const val USERS = "users"
+    const val SHOPPING_LIST = "shopping_list"
+    const val SHOPPING_ITEM = "item"
 }

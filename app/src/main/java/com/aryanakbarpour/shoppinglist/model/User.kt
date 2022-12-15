@@ -10,3 +10,8 @@ data class User (
     @ServerTimestamp
     val createdAt: Date? = null,
 )
+
+enum class AppMode{
+    ONLINE,
+    OFFLINE
+}

@@ -1,6 +1,5 @@
 package com.aryanakbarpour.shoppinglist
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -14,10 +13,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.aryanakbarpour.shoppinglist.service.remote.AuthViewModel
 import com.aryanakbarpour.shoppinglist.ui.screens.*
 import com.aryanakbarpour.shoppinglist.ui.theme.ShoppingListTheme
 import com.aryanakbarpour.shoppinglist.viewmodel.ShoppingListViewModel
+import com.aryanakbarpour.shoppinglist.viewmodel.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -26,7 +25,7 @@ class ShoppingListActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         val shoppingListViewModel: ShoppingListViewModel by viewModels()
-
+        val userViewModel: UserViewModel by viewModels()
 
         setContent {
             ShoppingListTheme {
@@ -39,28 +38,29 @@ class ShoppingListActivity : ComponentActivity() {
 
                     NavHost(navController = navController, startDestination = Screen.MainListScreen.route) {
                         composable(Screen.MainListScreen.route) {
-                            MainListScreen(navController = navController, shoppingListViewModel= shoppingListViewModel)
+                            MainListScreen(navController = navController, shoppingListViewModel= shoppingListViewModel, userViewModel = userViewModel, navigateToLogin = {finish()} )
                         }
                         composable(
                             route = Screen.ViewListScreen.route + "/{listId}",
                             arguments = listOf(navArgument("listId") {
-                                type = NavType.LongType
-                                defaultValue = -1L
+                                type = NavType.StringType
+                                nullable = false
                             })
                         ) { entry ->
-                            ViewListScreen(navController = navController, shoppingListViewModel= shoppingListViewModel, listId = entry.arguments?.getLong("listId"))
+                            ViewListScreen(navController = navController, shoppingListViewModel= shoppingListViewModel, userViewModel = userViewModel, listId = entry.arguments?.getString("listId")!!)
                         }
                         composable(Screen.CreateListScreen.route) {
-                            CreateListScreen(navController = navController, shoppingListViewModel= shoppingListViewModel)
+                            CreateListScreen(navController = navController, shoppingListViewModel= shoppingListViewModel, userViewModel = userViewModel)
                         }
                         composable(
                             route = Screen.EditListScreen.route + "/{listId}",
                             arguments = listOf(navArgument("listId") {
-                                type = NavType.LongType
-                                defaultValue = -1L
+                                type = NavType.StringType
+                                defaultValue = null
+                                nullable = true
                             })
                         ) { entry ->
-                            CreateListScreen(navController = navController, shoppingListViewModel= shoppingListViewModel, listId = entry.arguments?.getLong("listId"))
+                            CreateListScreen(navController = navController, shoppingListViewModel= shoppingListViewModel, userViewModel = userViewModel, listId = entry.arguments?.getString("listId"))
                         }
                     }
 

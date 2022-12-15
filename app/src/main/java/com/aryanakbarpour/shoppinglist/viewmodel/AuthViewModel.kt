@@ -1,4 +1,4 @@
-package com.aryanakbarpour.shoppinglist.service.remote
+package com.aryanakbarpour.shoppinglist.viewmodel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -6,6 +6,9 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aryanakbarpour.shoppinglist.model.Response.*
+import com.aryanakbarpour.shoppinglist.service.remote.AuthRepository
+import com.aryanakbarpour.shoppinglist.service.remote.OneTapSignInResponse
+import com.aryanakbarpour.shoppinglist.service.remote.SignInWithGoogleResponse
 import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.firebase.auth.AuthCredential
 import dagger.hilt.android.lifecycle.HiltViewModel
