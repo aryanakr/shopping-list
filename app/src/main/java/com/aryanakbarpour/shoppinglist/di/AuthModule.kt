@@ -10,6 +10,7 @@ import com.aryanakbarpour.shoppinglist.service.remote.*
 import com.aryanakbarpour.shoppinglist.util.Constants.SIGN_IN_REQUEST
 import com.aryanakbarpour.shoppinglist.util.Constants.SIGN_UP_REQUEST
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
+import com.google.android.gms.auth.api.identity.BeginSignInRequest.PasswordRequestOptions
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -56,6 +57,7 @@ class AuthModule {
                 .setServerClientId(app.getString(R.string.web_client_id))
                 .setFilterByAuthorizedAccounts(true)
                 .build())
+        .setPasswordRequestOptions(PasswordRequestOptions.builder().setSupported(true).build())
         .setAutoSelectEnabled(true)
         .build()
 
@@ -70,6 +72,7 @@ class AuthModule {
                 .setServerClientId(app.getString(R.string.web_client_id))
                 .setFilterByAuthorizedAccounts(false)
                 .build())
+        .setPasswordRequestOptions(PasswordRequestOptions.builder().setSupported(true).build())
         .build()
 
     @Provides

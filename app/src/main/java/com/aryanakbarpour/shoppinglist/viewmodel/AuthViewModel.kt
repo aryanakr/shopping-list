@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.aryanakbarpour.shoppinglist.model.Response
 import com.aryanakbarpour.shoppinglist.model.Response.*
 import com.aryanakbarpour.shoppinglist.service.remote.AuthRepository
 import com.aryanakbarpour.shoppinglist.service.remote.OneTapSignInResponse
@@ -36,6 +37,18 @@ class AuthViewModel @Inject constructor(
     fun signInWithGoogle(googleCredential: AuthCredential) = viewModelScope.launch {
         oneTapSignInResponse = Loading
         signInWithGoogleResponse = repo.firebaseSignInWithGoogle(googleCredential)
+    }
+
+    suspend fun signUpWithEmail(email: String, password: String, name: String) : Response<Boolean> {
+
+        return repo.firebaseSignUpWithEmail(email, password, name)
+
+    }
+
+    suspend fun loginWithEmail(email: String, password: String) : Response<Boolean> {
+
+        return repo.firebaseLoginWithEmail(email, password)
+
     }
 
 }

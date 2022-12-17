@@ -1,5 +1,7 @@
 package com.aryanakbarpour.shoppinglist.service.remote
 
+import android.util.Log
+import com.aryanakbarpour.shoppinglist.model.Response
 import com.aryanakbarpour.shoppinglist.model.Response.Success
 import com.aryanakbarpour.shoppinglist.model.Response.Failure
 import com.aryanakbarpour.shoppinglist.model.User
@@ -60,11 +62,63 @@ class AuthRepositoryImpl @Inject constructor(
         }
     }
 
-    private suspend fun addUserToFirestore() {
+    override suspend fun firebaseSignUpWithEmail(email: String, password: String, name: String) : Response<Boolean> {
+
+        if (email.trim().isBlank() || password.trim().isBlank()) {
+            return Failure(Exception("Please fill all fields"))
+        }
+
+        if (password.length < 8) {
+            return Failure(Exception("Password must be at least 8 characters"))
+        }
+
+        return try {
+            val authResult = auth.createUserWithEmailAndPassword(email, password).await()
+            val isNewUser = authResult.additionalUserInfo?.isNewUser ?: false
+            if (isNewUser) {
+                addUserToFirestore(name)
+                Success(true)
+            }
+            else {
+                Log.d("pest", "firebaseSignUpWithEmail: user already exists")
+                Failure(Exception("User already exists"))
+            }
+
+        } catch (e: Exception) {
+            Log.d("pest", "signup failure: ${e.message},,, ${e}")
+            Failure(e)
+        }
+    }
+
+    override suspend fun firebaseLoginWithEmail(email: String, password: String) : Response<Boolean> {
+
+        if (email.trim().isBlank()) {
+            return Failure(Exception("Email is empty"))
+        }
+
+        return try {
+            val authResult = auth.signInWithEmailAndPassword(email.trim(), password).await()
+            Success(true)
+        } catch (e: Exception) {
+            Log.d("pest", e.toString())
+            Failure(e)
+        }
+    }
+
+    override suspend fun checkIfUserExists(email: String): Response<Boolean> {
+        return try {
+            val querySnapshot = db.collection(USERS).whereEqualTo("email", email).get().await()
+            Success(querySnapshot.documents.isNotEmpty())
+        } catch (e: Exception) {
+            Failure(e)
+        }
+    }
+
+    private suspend fun addUserToFirestore(name: String? = null) {
         auth.currentUser?.apply {
             val user = User(
                 id = uid,
-                name = displayName,
+                name = name ?: displayName,
                 email = email
             )
             db.collection(USERS).document(uid).set(user).await()

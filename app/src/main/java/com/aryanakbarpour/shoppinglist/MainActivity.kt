@@ -38,7 +38,11 @@ class MainActivity : ComponentActivity() {
 
                     NavHost(navController = navController, startDestination = Screen.LoginScreen.route) {
                         composable(Screen.LoginScreen.route) {
-                            LoginScreen(viewModel = authViewModel, navigateToProfileScreen = {navigateToShoppingList()})
+                            LoginScreen(navController = navController,viewModel = authViewModel, navigateToShoppingList = {navigateToShoppingList()})
+                        }
+
+                        composable(Screen.SignUpScreen.route) {
+                            SignUpScreen(navController = navController,viewModel = authViewModel, navigateToShoppingList = {navigateToShoppingList()})
                         }
 
                     }

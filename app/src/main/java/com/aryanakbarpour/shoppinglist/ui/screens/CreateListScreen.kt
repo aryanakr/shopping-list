@@ -139,7 +139,6 @@ fun CreateListScreen(navController: NavController, shoppingListViewModel: Shoppi
         Surface (
             color = Color.Transparent,
             modifier = Modifier
-                .padding(it)
                 .background(
                     brush = Brush.verticalGradient(
                         colors = listOf(
@@ -151,6 +150,7 @@ fun CreateListScreen(navController: NavController, shoppingListViewModel: Shoppi
                 )
                 .fillMaxHeight()
                 .fillMaxWidth()
+                .padding(it)
         ) {
             if (showItemDialogState.value) {
                 ShoppingItemAddEditDialog(
