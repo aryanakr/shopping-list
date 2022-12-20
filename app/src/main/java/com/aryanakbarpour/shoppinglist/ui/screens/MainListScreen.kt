@@ -1,5 +1,6 @@
 package com.aryanakbarpour.shoppinglist.ui.screens
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -17,15 +18,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.aryanakbarpour.shoppinglist.model.AppMode
 import com.aryanakbarpour.shoppinglist.model.CollectionStatus
 import com.aryanakbarpour.shoppinglist.model.ShoppingListWithItems
+import com.aryanakbarpour.shoppinglist.ui.components.AnimatedSurface
 import com.aryanakbarpour.shoppinglist.ui.theme.Primary
 import com.aryanakbarpour.shoppinglist.ui.theme.PrimaryDark
 import com.aryanakbarpour.shoppinglist.ui.theme.PrimaryLight
@@ -119,45 +123,39 @@ fun MainListScreen(
                 Icon(Icons.Filled.Add, contentDescription = "Create new list")
             }
         }
-        ) {
-        Box(modifier = Modifier
-            .padding(it)
-            .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        Primary,
-                        PrimaryLight,
-                        PrimaryLight
-                    ),
-                )
-            )
-            .fillMaxWidth()
-            .fillMaxHeight()
-            .padding(vertical = 8.dp, horizontal = 16.dp)) {
-            Column {
-                // Active lists
-                SectionHeader(title = "Active Lists")
-                LazyColumn(modifier = Modifier.weight(1f)) {
-                    val activateItems = shoppingListsState.value.filter { it.shoppingList.isActive}
-                    items(activateItems.size) { index ->
-                        val shoppingList = activateItems[index]
-                        ShoppingListItem(
-                            shoppingList,
-                            shoppingListViewModel::toggleShoppingListActiveState,
-                            onItemClickListener = {navController.navigate(Screen.ViewListScreen.withArgs(shoppingList.shoppingList.id!!))})
-                        Spacer(modifier = Modifier.height(8.dp))
+        ) { padding ->
+        AnimatedSurface(padding = padding) {
+            Box(modifier = Modifier
+                .fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                val allItems = shoppingListsState.value.filter { !it.shoppingList.isArchived }
+
+                if (allItems.isEmpty()) {
+                    Box(
+                        modifier = Modifier
+                            .shadow(4.dp, RoundedCornerShape(4.dp))
+                            .background(Color.White)
+                            .fillMaxWidth(0.75f)
+                            .padding(16.dp),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Column( horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text(text = "You have no shopping lists yet", style = MaterialTheme.typography.body1, textAlign = TextAlign.Center)
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Text(text = "create one by clicking the + button", style = MaterialTheme.typography.body1, textAlign = TextAlign.Center)
+                        }
                     }
                 }
 
-                // Inactive lists
-                SectionHeader(title = "All Lists")
-                LazyColumn(modifier = Modifier.weight(3f)) {
-                    val allItems = shoppingListsState.value.filter { !it.shoppingList.isActive }
+                LazyColumn(modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+
                     items(allItems.size) { index ->
                         val shoppingList = allItems[index]
                         ShoppingListItem(
                             shoppingList,
-                            shoppingListViewModel::toggleShoppingListActiveState,
                             onItemClickListener = {navController.navigate(Screen.ViewListScreen.withArgs(shoppingList.shoppingList.id!!))})
                         Spacer(modifier = Modifier.height(8.dp))
                     }
@@ -172,9 +170,10 @@ fun MainListScreen(
 }
 
 @Composable
-fun ShoppingListItem(shoppingList: ShoppingListWithItems, activateList: (ShoppingListWithItems) -> Unit, onItemClickListener: () -> Unit) {
+fun ShoppingListItem(shoppingList: ShoppingListWithItems, onItemClickListener: () -> Unit) {
     Box(modifier = Modifier
-        .fillMaxWidth()
+        .shadow(8.dp, RoundedCornerShape(16.dp))
+        .width(350.dp)
         .height(60.dp)
         .clip(RoundedCornerShape(16.dp))
         .background(Color.White)
@@ -193,34 +192,7 @@ fun ShoppingListItem(shoppingList: ShoppingListWithItems, activateList: (Shoppin
                         modifier = Modifier.padding(16.dp),
                         text = "${shoppingList.items.filter { it.collectionStatus == CollectionStatus.COLLECTED }.size.toString()}/${shoppingList.items.size}")
 
-                Button(onClick = {activateList(shoppingList)},
-                    colors = ButtonDefaults.buttonColors(
-                        backgroundColor = if (shoppingList.shoppingList.isActive) PrimaryDark else Primary,
-                        contentColor =  if (shoppingList.shoppingList.isActive) Color.White else Color.Black)) {
-                    Text(text = if (shoppingList.shoppingList.isActive) "Remove" else "Activate")
-                }
             }
-        }
-
-    }
-
-}
-
-@Composable
-fun SectionHeader(title: String) {
-    Box(modifier = Modifier
-        .fillMaxWidth()
-        .padding(horizontal = 32.dp), contentAlignment = Alignment.Center) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Box(modifier = Modifier
-                .height(2.dp)
-                .weight(1f)
-                .background(PrimaryDark))
-            Text(modifier = Modifier.padding(16.dp),text = title, color = PrimaryDark)
-            Box(modifier = Modifier
-                .height(2.dp)
-                .weight(1f)
-                .background(PrimaryDark))
         }
 
     }

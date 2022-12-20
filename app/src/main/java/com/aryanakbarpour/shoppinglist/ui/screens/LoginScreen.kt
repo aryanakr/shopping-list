@@ -6,16 +6,12 @@ import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -23,10 +19,8 @@ import androidx.navigation.NavController
 import com.aryanakbarpour.shoppinglist.R
 import com.aryanakbarpour.shoppinglist.model.Response
 import com.aryanakbarpour.shoppinglist.model.Response.*
-import com.aryanakbarpour.shoppinglist.ui.components.ScreenSurface
-import com.aryanakbarpour.shoppinglist.ui.theme.Primary
+import com.aryanakbarpour.shoppinglist.ui.components.AnimatedSurface
 import com.aryanakbarpour.shoppinglist.ui.theme.PrimaryDark
-import com.aryanakbarpour.shoppinglist.ui.theme.PrimaryLight
 import com.aryanakbarpour.shoppinglist.viewmodel.AuthViewModel
 import com.google.android.gms.auth.api.identity.BeginSignInResult
 import com.google.android.gms.common.api.ApiException
@@ -110,7 +104,7 @@ fun LoginScreen(
 
 
     Scaffold() { padding ->
-        ScreenSurface(
+        AnimatedSurface(
             padding = padding,
         ) {
 

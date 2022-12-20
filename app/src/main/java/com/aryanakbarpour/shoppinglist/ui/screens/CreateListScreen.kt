@@ -69,9 +69,6 @@ fun CreateListScreen(navController: NavController, shoppingListViewModel: Shoppi
         mutableStateOf(
             TextFieldValue(text = shoppingList?.shoppingList?.name ?: "")) }
 
-    val activeCheckState = remember {
-        mutableStateOf(
-            shoppingList?.shoppingList?.isActive ?: false) }
 
     val shoppingListItems =
         if (listId != null )
@@ -84,7 +81,6 @@ fun CreateListScreen(navController: NavController, shoppingListViewModel: Shoppi
 
     if (shoppingList != null && !isInitialised.value) {
         listNameState.value = TextFieldValue(text = shoppingList.shoppingList.name)
-        activeCheckState.value = shoppingList.shoppingList.isActive
 
         val populatedItems = mutableListOf<ShoppingItem>()
         populatedItems.addAll(listItems.value)
@@ -112,7 +108,6 @@ fun CreateListScreen(navController: NavController, shoppingListViewModel: Shoppi
                     val newList = ShoppingList(
                         id = listId ?: "",
                         name = listNameState.value.text,
-                        isActive = activeCheckState.value
                     )
 
                     if (listId == null) {
@@ -195,8 +190,6 @@ fun CreateListScreen(navController: NavController, shoppingListViewModel: Shoppi
                             .fillMaxWidth(0.6f)
                             .clip(RoundedCornerShape(8.dp))
                     )
-
-                    Switch(checked = activeCheckState.value, onCheckedChange = {activeCheckState.value = it})
                 }
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -283,7 +276,7 @@ fun ShoppingItemAddEditDialog(
     }
 
     val amountState = remember {
-        mutableStateOf<Double>(item?.quantity ?: 0.0)
+        mutableStateOf<String>(item?.quantity ?: "")
     }
 
     val unitState = remember {
@@ -345,7 +338,7 @@ fun ShoppingItemAddEditDialog(
                             value = amountState.value.toString(),
                             onValueChange = {
                                 try {
-                                    amountState.value = it.toDouble()
+                                    amountState.value = it
                                 } catch (e: NumberFormatException) {
                                     e.printStackTrace()
                                 }
@@ -391,7 +384,7 @@ fun ShoppingItemAddEditDialog(
 
                                 val newItem = ShoppingItem(
                                     name = nameState.value,
-                                    quantity = amountState.value.toDouble(),
+                                    quantity = amountState.value,
                                     unit = unitState.value
                                 )
                                 onAddItem(newItem)

@@ -6,8 +6,7 @@ import androidx.room.*
 data class ShoppingList (
     @PrimaryKey val id: String = "",
     val name: String = "",
-    val isActive: Boolean = false,
-    val isClosed: Boolean = false,
+    val isArchived: Boolean = false,
 )
 
 data class ShoppingListWithItems(

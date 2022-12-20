@@ -9,4 +9,5 @@ class ShoppingListApp: Application() {
     override fun onCreate() {
         super.onCreate()
     }
+
 }

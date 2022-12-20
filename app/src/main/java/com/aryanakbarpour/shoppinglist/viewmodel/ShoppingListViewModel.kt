@@ -26,7 +26,6 @@ interface ShoppingListViewModelInterface {
     fun addShoppingList(shoppingList: ShoppingListWithItems)
     fun updateShoppingList(shoppingList: ShoppingListWithItems)
     fun deleteShoppingList(shoppingList: ShoppingListWithItems)
-    fun toggleShoppingListActiveState(shoppingList: ShoppingListWithItems)
 
     fun updateShoppingItem(shoppingItem: ShoppingItem)
     fun archiveList(shoppingList: ShoppingListWithItems)
@@ -77,17 +76,6 @@ class ShoppingListViewModel @Inject internal constructor(
         }
     }
 
-
-    override fun toggleShoppingListActiveState(shoppingList: ShoppingListWithItems) {
-        ioScope.launch {
-            val newList = shoppingList.shoppingList.copy(isActive = !shoppingList.shoppingList.isActive)
-            ioScope.launch {
-                shoppingRepo.updateShoppingList(newList)
-            }
-
-        }
-    }
-
     override fun updateShoppingItem(shoppingItem: ShoppingItem) {
         ioScope.launch {
             shoppingRepo.updateShoppingItem(shoppingItem)
@@ -96,7 +84,7 @@ class ShoppingListViewModel @Inject internal constructor(
 
     override fun archiveList(shoppingList: ShoppingListWithItems) {
         ioScope.launch {
-            val newList = shoppingList.shoppingList.copy(isClosed = true)
+            val newList = shoppingList.shoppingList.copy(isArchived = true)
             shoppingRepo.updateShoppingList(newList)
         }
     }
@@ -116,9 +104,9 @@ fun getTestShoppingListViewModel() : ShoppingListViewModelInterface {
         override val shoppingListsFlow: Flow<List<ShoppingListWithItems>>
             get() = flowOf(
                 listOf(
-                    ShoppingListWithItems(ShoppingList(UUID.randomUUID().toString(), "test"), listOf(ShoppingItem(name = "test item 1", quantity = 3.0, unit = "kg"), ShoppingItem(name = "test item 2", quantity = 2.0, unit = "kg"))),
-                    ShoppingListWithItems(ShoppingList(UUID.randomUUID().toString(), "test2"), listOf(ShoppingItem(name = "test item 1", quantity = 3.0, unit = "kg"), ShoppingItem(name = "test item 2", quantity = 2.0, unit = "kg"))),
-                    ShoppingListWithItems(ShoppingList(UUID.randomUUID().toString(), "test3"), listOf(ShoppingItem(name = "test item 1", quantity = 3.0, unit = "kg"), ShoppingItem(name = "test item 2", quantity = 2.0, unit = "kg")))
+                    ShoppingListWithItems(ShoppingList(UUID.randomUUID().toString(), "test"), listOf(ShoppingItem(name = "test item 1", quantity = "3", unit = "kg"), ShoppingItem(name = "test item 2", quantity = "3", unit = "kg"))),
+                    ShoppingListWithItems(ShoppingList(UUID.randomUUID().toString(), "test2"), listOf(ShoppingItem(name = "test item 1", quantity = "2", unit = "kg"), ShoppingItem(name = "test item 2", quantity = "3", unit = "kg"))),
+                    ShoppingListWithItems(ShoppingList(UUID.randomUUID().toString(), "test3"), listOf(ShoppingItem(name = "test item 1", quantity = "1", unit = "kg"), ShoppingItem(name = "test item 2", quantity = "3", unit = "kg")))
                 )
             )
 
@@ -129,7 +117,6 @@ fun getTestShoppingListViewModel() : ShoppingListViewModelInterface {
         override fun deleteShoppingList(shoppingList: ShoppingListWithItems) {}
 
 
-        override fun toggleShoppingListActiveState(shoppingList: ShoppingListWithItems) {}
         override fun updateShoppingItem(shoppingItem: ShoppingItem) {
             TODO("Not yet implemented")
         }

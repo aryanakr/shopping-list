@@ -15,6 +15,7 @@ import androidx.navigation.compose.rememberNavController
 import com.aryanakbarpour.shoppinglist.viewmodel.AuthViewModel
 import com.aryanakbarpour.shoppinglist.ui.screens.*
 import com.aryanakbarpour.shoppinglist.ui.theme.ShoppingListTheme
+import com.aryanakbarpour.shoppinglist.util.Constants
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -24,7 +25,9 @@ class MainActivity : ComponentActivity() {
 
         val authViewModel : AuthViewModel by viewModels()
 
-        if (authViewModel.isUserAuthenticated) {
+        val skipLoginPref = getSharedPreferences(Constants.SHARED_PREFERENCE_NAME, MODE_PRIVATE).getBoolean(
+            Constants.SKIP_LOGIN_PREF, false)
+        if (authViewModel.isUserAuthenticated || skipLoginPref) {
             navigateToShoppingList()
         }
 

@@ -1,6 +1,5 @@
 package com.aryanakbarpour.shoppinglist.ui.components
 
-import android.util.Log
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
@@ -16,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.aryanakbarpour.shoppinglist.ui.theme.Primary
 import com.aryanakbarpour.shoppinglist.ui.theme.PrimaryLight
@@ -24,7 +22,7 @@ import kotlin.random.Random
 
 
 @Composable
-fun ScreenSurface(padding: PaddingValues, content: @Composable () -> Unit) {
+fun AnimatedSurface(padding: PaddingValues, content: @Composable () -> Unit) {
 
     Surface(
         color = Color.Transparent,

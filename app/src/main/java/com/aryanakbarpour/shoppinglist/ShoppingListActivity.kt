@@ -8,24 +8,38 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.aryanakbarpour.shoppinglist.model.AppMode
 import com.aryanakbarpour.shoppinglist.ui.screens.*
 import com.aryanakbarpour.shoppinglist.ui.theme.ShoppingListTheme
+import com.aryanakbarpour.shoppinglist.util.Constants
 import com.aryanakbarpour.shoppinglist.viewmodel.ShoppingListViewModel
 import com.aryanakbarpour.shoppinglist.viewmodel.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ShoppingListActivity : ComponentActivity() {
+
+    lateinit var navController: NavHostController
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val shoppingListViewModel: ShoppingListViewModel by viewModels()
         val userViewModel: UserViewModel by viewModels()
+
+        // set skip offline skip login preference
+        if (userViewModel.appMode == AppMode.OFFLINE) {
+            getSharedPreferences(Constants.SHARED_PREFERENCE_NAME, MODE_PRIVATE).edit().putBoolean(Constants.SKIP_LOGIN_PREF, true).apply()
+        } else {
+            getSharedPreferences(Constants.SHARED_PREFERENCE_NAME, MODE_PRIVATE).edit().putBoolean(Constants.SKIP_LOGIN_PREF, false).apply()
+        }
 
         setContent {
             ShoppingListTheme {
@@ -34,11 +48,14 @@ class ShoppingListActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    val navController = rememberNavController()
+                    navController = rememberNavController()
 
                     NavHost(navController = navController, startDestination = Screen.MainListScreen.route) {
                         composable(Screen.MainListScreen.route) {
-                            MainListScreen(navController = navController, shoppingListViewModel= shoppingListViewModel, userViewModel = userViewModel, navigateToLogin = {finish()} )
+                            MainListScreen(navController = navController, shoppingListViewModel= shoppingListViewModel, userViewModel = userViewModel, navigateToLogin = {
+                                getSharedPreferences(Constants.SHARED_PREFERENCE_NAME, MODE_PRIVATE).edit().putBoolean(Constants.SKIP_LOGIN_PREF, false).apply()
+                                finish()
+                            } )
                         }
                         composable(
                             route = Screen.ViewListScreen.route + "/{listId}",
@@ -66,6 +83,14 @@ class ShoppingListActivity : ComponentActivity() {
 
                 }
             }
+        }
+    }
+
+    override fun onBackPressed() {
+        if (navController.currentDestination?.route == Screen.MainListScreen.route) {
+            return
+        } else {
+            super.onBackPressed()
         }
     }
 }
