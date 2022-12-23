@@ -20,16 +20,36 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
 import com.aryanakbarpour.shoppinglist.R
+import com.aryanakbarpour.shoppinglist.presentation.screens.Screen
 import com.aryanakbarpour.shoppinglist.presentation.theme.ShoppingListTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            WearApp("Android")
+            ShoppingListTheme {
+                val navController = rememberNavController()
+
+                NavHost(navController = navController, startDestination = Screen.LoginScreen.route) {
+                    composable(Screen.LoginScreen.route) {
+
+                    }
+
+                    composable(Screen.AllListsScreen.route) {
+
+                    }
+
+                    composable(Screen.ViewListScreen.route) {
+
+                    }
+                }
+            }
         }
     }
 }
@@ -61,9 +81,3 @@ fun Greeting(greetingName: String) {
         text = stringResource(R.string.hello_world, greetingName)
     )
 }
-//
-//@Preview(device = Devices.WEAR_OS_SMALL_ROUND, showSystemUi = true)
-//@Composable
-//fun DefaultPreview() {
-//    WearApp("Preview Android")
-//}
