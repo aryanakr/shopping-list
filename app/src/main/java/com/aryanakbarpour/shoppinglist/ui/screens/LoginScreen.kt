@@ -290,17 +290,6 @@ fun GoogleSignInComponent(viewModel: AuthViewModel, launch: (BeginSignInResult) 
 }
 
 @Composable
-fun AuthTopBar() {
-    TopAppBar (
-        title = {
-            Text(
-                text = "Shopping List"
-            )
-        }
-    )
-}
-
-@Composable
 fun AuthContent(
     oneTapSignIn: () -> Unit
 ) {

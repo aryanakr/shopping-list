@@ -9,6 +9,7 @@ package com.aryanakbarpour.shoppinglist.presentation
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -26,22 +27,35 @@ import androidx.navigation.compose.rememberNavController
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
 import com.aryanakbarpour.shoppinglist.R
+import com.aryanakbarpour.shoppinglist.presentation.screens.AllListsScreen
+import com.aryanakbarpour.shoppinglist.presentation.screens.LoginScreen
 import com.aryanakbarpour.shoppinglist.presentation.screens.Screen
 import com.aryanakbarpour.shoppinglist.presentation.theme.ShoppingListTheme
+import com.aryanakbarpour.shoppinglist.viewmodel.AuthViewModel
+import com.aryanakbarpour.shoppinglist.viewmodel.ShoppingListViewModel
+import com.aryanakbarpour.shoppinglist.viewmodel.UserViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val authViewModel : AuthViewModel by viewModels()
+        val userViewModel : UserViewModel by viewModels()
+        val shoppingListViewModel : ShoppingListViewModel by viewModels()
+
         setContent {
             ShoppingListTheme {
                 val navController = rememberNavController()
 
                 NavHost(navController = navController, startDestination = Screen.LoginScreen.route) {
                     composable(Screen.LoginScreen.route) {
-
+                        LoginScreen(authViewModel, {navController.navigate(Screen.AllListsScreen.route)})
                     }
 
                     composable(Screen.AllListsScreen.route) {
+                        AllListsScreen(navController, userViewModel, shoppingListViewModel)
 
                     }
 
