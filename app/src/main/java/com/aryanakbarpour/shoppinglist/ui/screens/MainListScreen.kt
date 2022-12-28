@@ -26,9 +26,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.aryanakbarpour.shoppinglist.model.AppMode
-import com.aryanakbarpour.shoppinglist.model.CollectionStatus
-import com.aryanakbarpour.shoppinglist.model.ShoppingListWithItems
+import com.aryanakbarpour.shoppinglist.core.model.AppMode
+import com.aryanakbarpour.shoppinglist.core.model.CollectionStatus
+import com.aryanakbarpour.shoppinglist.core.model.ShoppingListWithItems
 import com.aryanakbarpour.shoppinglist.ui.components.AnimatedSurface
 import com.aryanakbarpour.shoppinglist.ui.theme.Primary
 import com.aryanakbarpour.shoppinglist.ui.theme.PrimaryDark

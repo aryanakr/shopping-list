@@ -6,9 +6,9 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
-import com.aryanakbarpour.shoppinglist.model.ShoppingItem
-import com.aryanakbarpour.shoppinglist.model.ShoppingList
-import com.aryanakbarpour.shoppinglist.model.ShoppingListWithItems
+import com.aryanakbarpour.shoppinglist.core.model.ShoppingItem
+import com.aryanakbarpour.shoppinglist.core.model.ShoppingList
+import com.aryanakbarpour.shoppinglist.core.model.ShoppingListWithItems
 import kotlinx.coroutines.flow.Flow
 
 @Dao

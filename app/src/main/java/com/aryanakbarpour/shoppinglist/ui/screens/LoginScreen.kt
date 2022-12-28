@@ -17,8 +17,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.aryanakbarpour.shoppinglist.R
-import com.aryanakbarpour.shoppinglist.model.Response
-import com.aryanakbarpour.shoppinglist.model.Response.*
+import com.aryanakbarpour.shoppinglist.core.model.Response
+import com.aryanakbarpour.shoppinglist.core.model.Response.*
 import com.aryanakbarpour.shoppinglist.ui.components.AnimatedSurface
 import com.aryanakbarpour.shoppinglist.ui.theme.PrimaryDark
 import com.aryanakbarpour.shoppinglist.viewmodel.AuthViewModel

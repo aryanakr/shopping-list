@@ -29,8 +29,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.aryanakbarpour.shoppinglist.model.CollectionStatus
-import com.aryanakbarpour.shoppinglist.model.ShoppingItem
+import com.aryanakbarpour.shoppinglist.core.model.CollectionStatus
+import com.aryanakbarpour.shoppinglist.core.model.ShoppingItem
 import com.aryanakbarpour.shoppinglist.ui.theme.Primary
 import com.aryanakbarpour.shoppinglist.ui.theme.PrimaryDark
 import com.aryanakbarpour.shoppinglist.ui.theme.PrimaryLight

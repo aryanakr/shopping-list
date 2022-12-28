@@ -1,6 +1,6 @@
-package com.aryanakbarpour.shoppinglist.service.remote
+package com.aryanakbarpour.shoppinglist.core.service
 
-import com.aryanakbarpour.shoppinglist.model.Response
+import com.aryanakbarpour.shoppinglist.core.model.Response
 import com.google.android.gms.auth.api.identity.BeginSignInResult
 import com.google.firebase.auth.AuthCredential
 

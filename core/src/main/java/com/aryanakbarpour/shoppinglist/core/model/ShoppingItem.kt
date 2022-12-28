@@ -1,8 +1,9 @@
-package com.aryanakbarpour.shoppinglist.model
+package com.aryanakbarpour.shoppinglist.core.model
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import com.aryanakbarpour.shoppinglist.core.model.ShoppingList
 
 @Entity(
     tableName = "shopping_item",

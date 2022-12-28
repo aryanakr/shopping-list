@@ -1,24 +1,18 @@
 package com.aryanakbarpour.shoppinglist.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.aryanakbarpour.shoppinglist.model.AppMode
-import com.aryanakbarpour.shoppinglist.model.ShoppingItem
-import com.aryanakbarpour.shoppinglist.model.ShoppingList
-import com.aryanakbarpour.shoppinglist.model.ShoppingListWithItems
-import com.aryanakbarpour.shoppinglist.service.ShoppingListRepository
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
+import com.aryanakbarpour.shoppinglist.core.model.ShoppingItem
+import com.aryanakbarpour.shoppinglist.core.model.ShoppingList
+import com.aryanakbarpour.shoppinglist.core.model.ShoppingListWithItems
+import com.aryanakbarpour.shoppinglist.core.service.ShoppingListRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import java.util.UUID
 import javax.inject.Inject
-import javax.inject.Named
 
 interface ShoppingListViewModelInterface {
     val shoppingListsFlow: Flow<List<ShoppingListWithItems>>
@@ -37,7 +31,8 @@ interface ShoppingListViewModelInterface {
 
 @HiltViewModel
 class ShoppingListViewModel @Inject internal constructor(
-    private val shoppingRepo: ShoppingListRepository) : ViewModel(), ShoppingListViewModelInterface {
+    private val shoppingRepo: ShoppingListRepository
+) : ViewModel(), ShoppingListViewModelInterface {
 
     private val ioScope = CoroutineScope(Dispatchers.IO)
 

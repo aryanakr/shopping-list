@@ -3,12 +3,11 @@ package com.aryanakbarpour.shoppinglist.di
 import android.app.Application
 import android.content.Context
 import com.aryanakbarpour.shoppinglist.R
-import com.aryanakbarpour.shoppinglist.service.ShoppingListRepository
-import com.aryanakbarpour.shoppinglist.service.local.ShoppingListRepositoryLocalImpl
-import com.aryanakbarpour.shoppinglist.service.local.ShoppingListRoomDao
+import com.aryanakbarpour.shoppinglist.core.service.AuthRepository
+import com.aryanakbarpour.shoppinglist.core.service.UserRepository
 import com.aryanakbarpour.shoppinglist.service.remote.*
-import com.aryanakbarpour.shoppinglist.util.Constants.SIGN_IN_REQUEST
-import com.aryanakbarpour.shoppinglist.util.Constants.SIGN_UP_REQUEST
+import com.aryanakbarpour.shoppinglist.core.Constants.SIGN_IN_REQUEST
+import com.aryanakbarpour.shoppinglist.core.Constants.SIGN_UP_REQUEST
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.BeginSignInRequest.PasswordRequestOptions
 import com.google.android.gms.auth.api.identity.Identity
@@ -24,11 +23,9 @@ import com.google.firebase.ktx.Firebase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Named
-import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)

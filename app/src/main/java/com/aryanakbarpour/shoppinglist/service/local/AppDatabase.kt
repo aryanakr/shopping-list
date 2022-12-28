@@ -4,8 +4,8 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.aryanakbarpour.shoppinglist.model.ShoppingItem
-import com.aryanakbarpour.shoppinglist.model.ShoppingList
+import com.aryanakbarpour.shoppinglist.core.model.ShoppingItem
+import com.aryanakbarpour.shoppinglist.core.model.ShoppingList
 
 @Database(entities = [ShoppingList::class, ShoppingItem::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {

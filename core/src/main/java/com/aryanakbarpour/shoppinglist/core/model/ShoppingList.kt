@@ -1,4 +1,4 @@
-package com.aryanakbarpour.shoppinglist.model
+package com.aryanakbarpour.shoppinglist.core.model
 
 import androidx.room.*
 

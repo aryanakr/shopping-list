@@ -8,17 +8,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.aryanakbarpour.shoppinglist.model.AppMode
+import com.aryanakbarpour.shoppinglist.core.model.AppMode
 import com.aryanakbarpour.shoppinglist.ui.screens.*
 import com.aryanakbarpour.shoppinglist.ui.theme.ShoppingListTheme
-import com.aryanakbarpour.shoppinglist.util.Constants
+import com.aryanakbarpour.shoppinglist.core.Constants
 import com.aryanakbarpour.shoppinglist.viewmodel.ShoppingListViewModel
 import com.aryanakbarpour.shoppinglist.viewmodel.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -36,9 +35,11 @@ class ShoppingListActivity : ComponentActivity() {
 
         // set skip offline skip login preference
         if (userViewModel.appMode == AppMode.OFFLINE) {
-            getSharedPreferences(Constants.SHARED_PREFERENCE_NAME, MODE_PRIVATE).edit().putBoolean(Constants.SKIP_LOGIN_PREF, true).apply()
+            getSharedPreferences(Constants.SHARED_PREFERENCE_NAME, MODE_PRIVATE).edit().putBoolean(
+                Constants.SKIP_LOGIN_PREF, true).apply()
         } else {
-            getSharedPreferences(Constants.SHARED_PREFERENCE_NAME, MODE_PRIVATE).edit().putBoolean(Constants.SKIP_LOGIN_PREF, false).apply()
+            getSharedPreferences(Constants.SHARED_PREFERENCE_NAME, MODE_PRIVATE).edit().putBoolean(
+                Constants.SKIP_LOGIN_PREF, false).apply()
         }
 
         setContent {
@@ -53,7 +54,8 @@ class ShoppingListActivity : ComponentActivity() {
                     NavHost(navController = navController, startDestination = Screen.MainListScreen.route) {
                         composable(Screen.MainListScreen.route) {
                             MainListScreen(navController = navController, shoppingListViewModel= shoppingListViewModel, userViewModel = userViewModel, navigateToLogin = {
-                                getSharedPreferences(Constants.SHARED_PREFERENCE_NAME, MODE_PRIVATE).edit().putBoolean(Constants.SKIP_LOGIN_PREF, false).apply()
+                                getSharedPreferences(Constants.SHARED_PREFERENCE_NAME, MODE_PRIVATE).edit().putBoolean(
+                                    Constants.SKIP_LOGIN_PREF, false).apply()
                                 finish()
                             } )
                         }

@@ -15,7 +15,7 @@ import androidx.navigation.compose.rememberNavController
 import com.aryanakbarpour.shoppinglist.viewmodel.AuthViewModel
 import com.aryanakbarpour.shoppinglist.ui.screens.*
 import com.aryanakbarpour.shoppinglist.ui.theme.ShoppingListTheme
-import com.aryanakbarpour.shoppinglist.util.Constants
+import com.aryanakbarpour.shoppinglist.core.Constants
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

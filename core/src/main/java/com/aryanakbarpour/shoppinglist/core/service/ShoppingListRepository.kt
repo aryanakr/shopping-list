@@ -1,10 +1,8 @@
-package com.aryanakbarpour.shoppinglist.service
+package com.aryanakbarpour.shoppinglist.core.service
 
-import com.aryanakbarpour.shoppinglist.model.ShoppingItem
-import com.aryanakbarpour.shoppinglist.model.ShoppingList
-import com.aryanakbarpour.shoppinglist.model.ShoppingListWithItems
-import com.aryanakbarpour.shoppinglist.service.local.ShoppingListRepositoryLocalImpl
-import com.aryanakbarpour.shoppinglist.service.local.ShoppingListRoomDao
+import com.aryanakbarpour.shoppinglist.core.model.ShoppingItem
+import com.aryanakbarpour.shoppinglist.core.model.ShoppingList
+import com.aryanakbarpour.shoppinglist.core.model.ShoppingListWithItems
 import kotlinx.coroutines.flow.Flow
 
 interface ShoppingListRepository {

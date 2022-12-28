@@ -31,9 +31,9 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.aryanakbarpour.shoppinglist.model.ShoppingItem
-import com.aryanakbarpour.shoppinglist.model.ShoppingList
-import com.aryanakbarpour.shoppinglist.model.ShoppingListWithItems
+import com.aryanakbarpour.shoppinglist.core.model.ShoppingItem
+import com.aryanakbarpour.shoppinglist.core.model.ShoppingList
+import com.aryanakbarpour.shoppinglist.core.model.ShoppingListWithItems
 import com.aryanakbarpour.shoppinglist.ui.theme.Primary
 import com.aryanakbarpour.shoppinglist.ui.theme.PrimaryDark
 import com.aryanakbarpour.shoppinglist.ui.theme.PrimaryLight

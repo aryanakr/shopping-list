@@ -1,19 +1,17 @@
 package com.aryanakbarpour.shoppinglist.service.remote
 
 import android.util.Log
-import com.aryanakbarpour.shoppinglist.model.ShoppingItem
-import com.aryanakbarpour.shoppinglist.model.ShoppingList
-import com.aryanakbarpour.shoppinglist.model.ShoppingListWithItems
-import com.aryanakbarpour.shoppinglist.model.User
-import com.aryanakbarpour.shoppinglist.util.Constants.SHOPPING_ITEM
-import com.aryanakbarpour.shoppinglist.util.Constants.SHOPPING_LIST
-import com.aryanakbarpour.shoppinglist.util.Constants.USERS
+import com.aryanakbarpour.shoppinglist.core.model.ShoppingItem
+import com.aryanakbarpour.shoppinglist.core.model.ShoppingList
+import com.aryanakbarpour.shoppinglist.core.model.ShoppingListWithItems
+import com.aryanakbarpour.shoppinglist.core.Constants.SHOPPING_ITEM
+import com.aryanakbarpour.shoppinglist.core.Constants.SHOPPING_LIST
+import com.aryanakbarpour.shoppinglist.core.Constants.USERS
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 

@@ -1,4 +1,4 @@
-package com.aryanakbarpour.shoppinglist.util
+package com.aryanakbarpour.shoppinglist.core
 
 object Constants {
 
