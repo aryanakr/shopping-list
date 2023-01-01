@@ -1,18 +1,18 @@
 package com.aryanakbarpour.shoppinglist.service
 
 import android.util.Log
-import com.aryanakbarpour.shoppinglist.model.Response
-import com.aryanakbarpour.shoppinglist.model.Response.Success
-import com.aryanakbarpour.shoppinglist.model.Response.Failure
-import com.aryanakbarpour.shoppinglist.model.User
-import com.aryanakbarpour.shoppinglist.service.Constants.SIGN_IN_REQUEST
-import com.aryanakbarpour.shoppinglist.service.Constants.USERS
+import com.aryanakbarpour.shoppinglist.core.Constants.SIGN_IN_REQUEST
+import com.aryanakbarpour.shoppinglist.core.Constants.USERS
+import com.aryanakbarpour.shoppinglist.core.model.Response
+import com.aryanakbarpour.shoppinglist.core.model.Response.*
+import com.aryanakbarpour.shoppinglist.core.model.User
+import com.aryanakbarpour.shoppinglist.core.service.AuthRepository
+import com.aryanakbarpour.shoppinglist.core.service.OneTapSignInResponse
+import com.aryanakbarpour.shoppinglist.core.service.SignInWithGoogleResponse
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -52,6 +52,14 @@ class AuthRepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             Failure(e)
         }
+    }
+
+    override suspend fun firebaseSignUpWithEmail(
+        email: String,
+        password: String,
+        name: String
+    ): Response<Boolean> {
+        return Failure(Exception("Not supported for this device"))
     }
 
     override suspend fun firebaseLoginWithEmail(email: String, password: String) : Response<Boolean> {

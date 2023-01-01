@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.wear.compose.material.*
 import com.aryanakbarpour.shoppinglist.R
-import com.aryanakbarpour.shoppinglist.model.Response
+import com.aryanakbarpour.shoppinglist.core.model.Response
 import com.aryanakbarpour.shoppinglist.presentation.theme.Primary
 import com.aryanakbarpour.shoppinglist.presentation.theme.PrimaryDark
 import com.aryanakbarpour.shoppinglist.viewmodel.AuthViewModel

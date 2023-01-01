@@ -1,6 +1,8 @@
 package com.aryanakbarpour.shoppinglist.service
 
-import com.aryanakbarpour.shoppinglist.model.Response.*
+import com.aryanakbarpour.shoppinglist.core.model.Response.*
+import com.aryanakbarpour.shoppinglist.core.service.SignOutResponse
+import com.aryanakbarpour.shoppinglist.core.service.UserRepository
 import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.firebase.auth.FirebaseAuth

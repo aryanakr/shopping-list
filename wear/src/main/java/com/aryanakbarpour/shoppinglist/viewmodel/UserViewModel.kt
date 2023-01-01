@@ -1,8 +1,8 @@
 package com.aryanakbarpour.shoppinglist.viewmodel
 
 import androidx.lifecycle.ViewModel
-import com.aryanakbarpour.shoppinglist.model.AppMode
-import com.aryanakbarpour.shoppinglist.service.UserRepository
+import com.aryanakbarpour.shoppinglist.core.model.AppMode
+import com.aryanakbarpour.shoppinglist.core.service.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

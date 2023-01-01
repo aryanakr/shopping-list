@@ -1,11 +1,12 @@
 package com.aryanakbarpour.shoppinglist.service
 
 import android.util.Log
-import com.aryanakbarpour.shoppinglist.model.ShoppingItem
-import com.aryanakbarpour.shoppinglist.model.ShoppingList
-import com.aryanakbarpour.shoppinglist.service.Constants.SHOPPING_ITEM
-import com.aryanakbarpour.shoppinglist.service.Constants.SHOPPING_LIST
-import com.aryanakbarpour.shoppinglist.service.Constants.USERS
+import com.aryanakbarpour.shoppinglist.core.Constants.SHOPPING_ITEM
+import com.aryanakbarpour.shoppinglist.core.Constants.SHOPPING_LIST
+import com.aryanakbarpour.shoppinglist.core.Constants.USERS
+import com.aryanakbarpour.shoppinglist.core.model.ShoppingItem
+import com.aryanakbarpour.shoppinglist.core.model.ShoppingList
+import com.aryanakbarpour.shoppinglist.core.model.ShoppingListWithItems
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
 import kotlinx.coroutines.channels.awaitClose
@@ -23,7 +24,7 @@ class ShoppingListDaoImpl @Inject constructor(private val db: FirebaseFirestore,
         return db.collection(USERS).document(uid)
     }
 
-    override fun getShoppingLists(): Flow<List<ShoppingList>> = callbackFlow {
+    override fun getShoppingLists(): Flow<List<ShoppingListWithItems>> = callbackFlow {
 
         val userDoc = getUserDocument()
 
@@ -43,7 +44,10 @@ class ShoppingListDaoImpl @Inject constructor(private val db: FirebaseFirestore,
 
             if (snapshot != null && !snapshot.isEmpty) {
                 val shoppingLists = snapshot.toObjects(ShoppingList::class.java)
-                trySend(shoppingLists)
+                val shoppingListWithItems = shoppingLists.map { shoppingList ->
+                    ShoppingListWithItems(shoppingList, emptyList())
+                }
+                trySend(shoppingListWithItems)
             } else {
                 Log.d(TAG, "Current data: null")
                 close()

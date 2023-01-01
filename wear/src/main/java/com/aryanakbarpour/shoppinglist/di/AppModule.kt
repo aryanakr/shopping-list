@@ -3,8 +3,11 @@ package com.aryanakbarpour.shoppinglist.di
 import android.app.Application
 import android.content.Context
 import com.aryanakbarpour.shoppinglist.R
+import com.aryanakbarpour.shoppinglist.core.Constants.SIGN_IN_REQUEST
+import com.aryanakbarpour.shoppinglist.core.service.AuthRepository
 import com.aryanakbarpour.shoppinglist.service.*
-import com.aryanakbarpour.shoppinglist.service.Constants.SIGN_IN_REQUEST
+import com.aryanakbarpour.shoppinglist.core.service.ShoppingListRepository
+import com.aryanakbarpour.shoppinglist.core.service.UserRepository
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.auth.api.identity.SignInClient
