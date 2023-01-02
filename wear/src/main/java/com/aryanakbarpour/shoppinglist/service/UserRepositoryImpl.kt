@@ -28,7 +28,7 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun signOut(): SignOutResponse {
         return try {
-            oneTapClient.signOut().await()
+            //oneTapClient.signOut().await()
             auth.signOut()
             Success(true)
         } catch (e: Exception) {

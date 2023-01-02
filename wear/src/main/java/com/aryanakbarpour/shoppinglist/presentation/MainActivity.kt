@@ -6,7 +6,9 @@
 
 package com.aryanakbarpour.shoppinglist.presentation
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -21,6 +23,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -34,10 +38,21 @@ import com.aryanakbarpour.shoppinglist.presentation.theme.ShoppingListTheme
 import com.aryanakbarpour.shoppinglist.viewmodel.AuthViewModel
 import com.aryanakbarpour.shoppinglist.viewmodel.ShoppingListViewModel
 import com.aryanakbarpour.shoppinglist.viewmodel.UserViewModel
+import com.google.android.gms.auth.api.Auth
+import com.google.android.gms.auth.api.signin.GoogleSignInApi
+import com.google.android.gms.common.api.GoogleApiClient
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @Inject
+    lateinit var googleApiClient: GoogleApiClient
+
+    lateinit var navController: NavHostController
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -47,11 +62,11 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             ShoppingListTheme {
-                val navController = rememberNavController()
+                navController = rememberNavController()
 
                 NavHost(navController = navController, startDestination = Screen.LoginScreen.route) {
                     composable(Screen.LoginScreen.route) {
-                        LoginScreen(authViewModel, {navController.navigate(Screen.AllListsScreen.route)})
+                        LoginScreen(authViewModel, {navController.navigate(Screen.AllListsScreen.route)}, {launchGoogleSignIn()})
                     }
 
                     composable(Screen.AllListsScreen.route) {
@@ -66,6 +81,40 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+    fun launchGoogleSignIn() {
+        Auth.GoogleSignInApi.getSignInIntent(googleApiClient).also { signInIntent ->
+            startActivityForResult(signInIntent, 8585)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...)
+        if (requestCode == 8585) {
+            if (data != null) {
+                Auth.GoogleSignInApi.getSignInResultFromIntent(data)?.apply {
+                    if (isSuccess) {
+                        Log.d("MainActivity", "Google Sign In Success ${signInAccount?.email}")
+                        signInAccount?.idToken?.let { token ->
+                            FirebaseAuth.getInstance().signInWithCredential(
+                                com.google.firebase.auth.GoogleAuthProvider.getCredential(token, null)
+                            )
+                            .addOnSuccessListener {
+                                navController.navigate(Screen.AllListsScreen.route)
+                            }
+                            .addOnFailureListener {
+                                Log.d("MainActivity", "Firebase Sign In Failed ${it.message}")
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+    }
+
 }
 
 @Composable

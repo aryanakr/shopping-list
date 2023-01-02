@@ -12,11 +12,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.navigation.NavController
 import androidx.wear.compose.material.*
 import com.aryanakbarpour.shoppinglist.R
@@ -24,16 +26,26 @@ import com.aryanakbarpour.shoppinglist.core.model.Response
 import com.aryanakbarpour.shoppinglist.presentation.theme.Primary
 import com.aryanakbarpour.shoppinglist.presentation.theme.PrimaryDark
 import com.aryanakbarpour.shoppinglist.viewmodel.AuthViewModel
+import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.identity.BeginSignInResult
+import com.google.android.gms.auth.api.signin.GoogleSignInApi
 import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.common.api.GoogleApiClient
 import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(
     viewModel: AuthViewModel,
-    navigateToShoppingList: () -> Unit
+    navigateToShoppingList: () -> Unit,
+    launchGoogleApi: () -> Unit
 ) {
+    val context = LocalContext.current
+
+    // Check if the user is already signed in
+    if (viewModel.isUserAuthenticated) {
+        navigateToShoppingList()
+    }
 
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
@@ -76,8 +88,8 @@ fun LoginScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp)
-                .verticalScroll(rememberScrollState()),
+                .verticalScroll(rememberScrollState())
+                .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
@@ -120,7 +132,13 @@ fun LoginScreen(
 
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
-                GoogleSignInComponent(viewModel, { i -> launch(i) }, navigateToShoppingList)
+                //GoogleSignInComponent(viewModel, { i -> launch(i) }, navigateToShoppingList)
+                Button(onClick = {
+
+                    launchGoogleApi()
+                }) {
+                    Text(text = "google")
+                }
 
             }
 

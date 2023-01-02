@@ -8,12 +8,14 @@ import com.aryanakbarpour.shoppinglist.core.service.AuthRepository
 import com.aryanakbarpour.shoppinglist.service.*
 import com.aryanakbarpour.shoppinglist.core.service.ShoppingListRepository
 import com.aryanakbarpour.shoppinglist.core.service.UserRepository
+import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.GoogleApiClient
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -72,6 +74,14 @@ class AppModule {
         app: Application,
         options: GoogleSignInOptions
     ) = GoogleSignIn.getClient(app, options)
+
+    @Provides
+    fun provideGoogleApiClient(
+        app: Application,
+        options: GoogleSignInOptions
+    ) = GoogleApiClient.Builder(app)
+        .addApi(Auth.GOOGLE_SIGN_IN_API, options)
+        .build()
 
     @Provides
     fun provideAuthRepository(
