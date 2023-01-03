@@ -1,6 +1,7 @@
 package com.aryanakbarpour.shoppinglist.viewmodel
 
 import android.util.Log
+import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import com.aryanakbarpour.shoppinglist.core.model.AppMode
 import com.aryanakbarpour.shoppinglist.core.model.ShoppingItem

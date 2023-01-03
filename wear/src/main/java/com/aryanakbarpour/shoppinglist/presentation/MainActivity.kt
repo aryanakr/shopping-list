@@ -9,6 +9,7 @@ package com.aryanakbarpour.shoppinglist.presentation
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -25,15 +26,18 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
 import com.aryanakbarpour.shoppinglist.R
 import com.aryanakbarpour.shoppinglist.presentation.screens.AllListsScreen
 import com.aryanakbarpour.shoppinglist.presentation.screens.LoginScreen
 import com.aryanakbarpour.shoppinglist.presentation.screens.Screen
+import com.aryanakbarpour.shoppinglist.presentation.screens.ViewListScreen
 import com.aryanakbarpour.shoppinglist.presentation.theme.ShoppingListTheme
 import com.aryanakbarpour.shoppinglist.viewmodel.AuthViewModel
 import com.aryanakbarpour.shoppinglist.viewmodel.ShoppingListViewModel
@@ -56,6 +60,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+
         val authViewModel : AuthViewModel by viewModels()
         val userViewModel : UserViewModel by viewModels()
         val shoppingListViewModel : ShoppingListViewModel by viewModels()
@@ -74,8 +80,14 @@ class MainActivity : ComponentActivity() {
 
                     }
 
-                    composable(Screen.ViewListScreen.route) {
-
+                    composable(
+                        route = Screen.ViewListScreen.route + "/{listId}",
+                        arguments = listOf(navArgument("listId") {
+                            type = NavType.StringType
+                            nullable = false
+                        })
+                    ) { entry ->
+                        ViewListScreen(navController = navController, viewModel= shoppingListViewModel, listId = entry.arguments?.getString("listId")!!)
                     }
                 }
             }
