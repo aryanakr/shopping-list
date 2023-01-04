@@ -13,6 +13,7 @@ val Accent = Color(0xFF477A5D)
 val PrimaryLight = Color(0xFFEDF59A)
 val PrimaryDark = Color(0xFF7A8425)
 val Primary = Color(0xFFD5E341)
+val Background = Color(0xFF343A07)
 
 internal val wearColorPalette: Colors = Colors(
     primary = Primary,
@@ -22,5 +23,6 @@ internal val wearColorPalette: Colors = Colors(
     error = Red400,
     onPrimary = Color.Black,
     onSecondary = Color.Black,
-    onError = Color.Black
+    onError = Color.Black,
+    background = Background,
 )
