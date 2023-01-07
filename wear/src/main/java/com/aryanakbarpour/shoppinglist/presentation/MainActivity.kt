@@ -55,43 +55,29 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var googleApiClient: GoogleApiClient
 
-    lateinit var navController: NavHostController
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
         val authViewModel : AuthViewModel by viewModels()
-        val userViewModel : UserViewModel by viewModels()
-        val shoppingListViewModel : ShoppingListViewModel by viewModels()
+
 
         setContent {
             ShoppingListTheme {
-                navController = rememberNavController()
 
-                NavHost(navController = navController, startDestination = Screen.LoginScreen.route) {
-                    composable(Screen.LoginScreen.route) {
-                        LoginScreen(authViewModel, {navController.navigate(Screen.AllListsScreen.route)}, {launchGoogleSignIn()})
-                    }
-
-                    composable(Screen.AllListsScreen.route) {
-                        AllListsScreen(navController, userViewModel, shoppingListViewModel)
-
-                    }
-
-                    composable(
-                        route = Screen.ViewListScreen.route + "/{listId}",
-                        arguments = listOf(navArgument("listId") {
-                            type = NavType.StringType
-                            nullable = false
-                        })
-                    ) { entry ->
-                        ViewListScreen(navController = navController, viewModel= shoppingListViewModel, listId = entry.arguments?.getString("listId")!!)
-                    }
+                LoginScreen(viewModel = authViewModel, navigateToShoppingList = {
+                    navigateToShoppingList()
+                }) {
+                    launchGoogleSignIn()
                 }
             }
         }
+    }
+
+    private fun navigateToShoppingList() {
+        val intent = Intent(this, ShoppingListActivity::class.java)
+        startActivity(intent)
     }
 
     fun launchGoogleSignIn() {
@@ -114,7 +100,7 @@ class MainActivity : ComponentActivity() {
                                 com.google.firebase.auth.GoogleAuthProvider.getCredential(token, null)
                             )
                             .addOnSuccessListener {
-                                navController.navigate(Screen.AllListsScreen.route)
+                                navigateToShoppingList()
                             }
                             .addOnFailureListener {
                                 Log.d("MainActivity", "Firebase Sign In Failed ${it.message}")

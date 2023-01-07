@@ -49,7 +49,8 @@ import kotlin.math.sign
 fun AllListsScreen(
     navController: NavController,
     userViewModel: UserViewModel,
-    shoppingListViewModel: ShoppingListViewModel) {
+    shoppingListViewModel: ShoppingListViewModel,
+    exit: () -> Unit) {
 
     val localContext = LocalContext.current
 
@@ -58,7 +59,7 @@ fun AllListsScreen(
 
     if (signOutResult.value is Response.Success) {
         signOutResult.value = null
-        navController.navigate(Screen.LoginScreen.route)
+        exit()
     }
 
     val shoppingListsState = shoppingListViewModel.shoppingListsFlow.collectAsState(initial = listOf())
