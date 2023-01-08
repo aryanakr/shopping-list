@@ -23,6 +23,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.rotary.onRotaryScrollEvent
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -80,9 +82,14 @@ fun AllListsScreen(
         dialogState.value = true
     }
 
-    Scaffold(positionIndicator = {
-       PositionIndicator(scalingLazyListState = listState)
-    }) {
+    Scaffold(
+        timeText = {
+           TimeText()
+        },
+        positionIndicator = {
+            PositionIndicator(scalingLazyListState = listState)
+        }
+    ) {
 
         val focusRequester = remember { FocusRequester() }
 
@@ -124,6 +131,10 @@ fun AllListsScreen(
                 DashboardListItem(shoppingList = shoppingList) {
                     navController.navigate(Screen.ViewListScreen.withArgs(shoppingList.id))
                 }
+            }
+
+            item {
+                Spacer(modifier = Modifier.height(48.dp))
             }
 
             item {
@@ -186,15 +197,16 @@ fun SignOutDialog(
 
 @Composable
 fun DashboardListItem(shoppingList: ShoppingList, onClick: () -> Unit) {
-    Box(modifier = Modifier
-        .padding(8.dp)
-        .fillMaxWidth()
-        .height(40.dp)
-        .clip(RoundedCornerShape(16.dp))
-        .background(Primary)
-        .clickable { onClick() },
-        contentAlignment = Alignment.Center
-    ) {
-        Text(text = shoppingList.name, style = TextStyle(color = Color.Black, fontSize = 16.sp))
-    }
+
+    Chip(modifier = Modifier
+        .fillMaxWidth(),
+        label = {
+            Text(
+                text = shoppingList.name,
+                style = TextStyle(
+                    color = Color.Black,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.SemiBold),
+                    textAlign = TextAlign.Center)},
+        onClick = { onClick() })
 }
