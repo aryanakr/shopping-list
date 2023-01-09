@@ -21,7 +21,6 @@ data class ShoppingItem(
     val unit: String = "",
     val collectionStatus: CollectionStatus = CollectionStatus.NOT_COLLECTED,
     val listId: String? = null,
-    val position: Int = 0
 )
 
 enum class CollectionStatus {

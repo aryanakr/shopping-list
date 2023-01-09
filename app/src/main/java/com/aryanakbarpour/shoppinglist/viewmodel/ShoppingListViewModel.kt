@@ -1,5 +1,6 @@
 package com.aryanakbarpour.shoppinglist.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.aryanakbarpour.shoppinglist.core.model.ShoppingItem
 import com.aryanakbarpour.shoppinglist.core.model.ShoppingList
@@ -26,6 +27,7 @@ interface ShoppingListViewModelInterface {
 
     fun getShoppingList(id: String): Flow<ShoppingList>
     fun getShoppingListItems(listId: String): Flow<List<ShoppingItem>>
+    fun deleteShoppingItems(items: List<ShoppingItem>)
 
 }
 
@@ -92,6 +94,15 @@ class ShoppingListViewModel @Inject internal constructor(
         return shoppingRepo.getShoppingListItems(listId)
     }
 
+    override fun deleteShoppingItems(items: List<ShoppingItem>) {
+        ioScope.launch {
+            items.forEach {
+                Log.d("kir", "deleteShoppingItems: ${it.id}")
+                shoppingRepo.deleteShoppingItem(it)
+            }
+        }
+    }
+
 }
 
 fun getTestShoppingListViewModel() : ShoppingListViewModelInterface {
@@ -125,6 +136,10 @@ fun getTestShoppingListViewModel() : ShoppingListViewModelInterface {
         }
 
         override fun getShoppingListItems(listId: String): Flow<List<ShoppingItem>> {
+            TODO("Not yet implemented")
+        }
+
+        override fun deleteShoppingItems(items: List<ShoppingItem>) {
             TODO("Not yet implemented")
         }
 

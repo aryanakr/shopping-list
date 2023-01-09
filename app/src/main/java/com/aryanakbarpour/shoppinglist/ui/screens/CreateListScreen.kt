@@ -6,6 +6,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.GenericShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -62,12 +63,11 @@ fun CreateListScreen(navController: NavController, shoppingListViewModel: Shoppi
 
     val showItemDialogState = remember { mutableStateOf(false) }
 
-    val lastAddedIndex = remember { mutableStateOf(0) }
-
-
     val listNameState = remember {
         mutableStateOf(
             TextFieldValue(text = shoppingList?.shoppingList?.name ?: "")) }
+
+    val deletedItems = remember { mutableStateOf(listOf<ShoppingItem>()) }
 
 
     val shoppingListItems =
@@ -91,7 +91,7 @@ fun CreateListScreen(navController: NavController, shoppingListViewModel: Shoppi
         isInitialised.value = true
     }
 
-    val editItemState = remember { mutableStateOf(ShoppingItem()) }
+    val editItemIndex = remember { mutableStateOf(-1) }
 
 
     Scaffold (
@@ -113,6 +113,7 @@ fun CreateListScreen(navController: NavController, shoppingListViewModel: Shoppi
                     if (listId == null) {
                         shoppingListViewModel.addShoppingList(ShoppingListWithItems(newList, listItems.value))
                     } else {
+                        shoppingListViewModel.deleteShoppingItems(deletedItems.value)
                         shoppingListViewModel.updateShoppingList(ShoppingListWithItems(newList, listItems.value))
                     }
 
@@ -148,25 +149,24 @@ fun CreateListScreen(navController: NavController, shoppingListViewModel: Shoppi
                 .padding(it)
         ) {
             if (showItemDialogState.value) {
+                val editItem = if (editItemIndex.value != -1) listItems.value[editItemIndex.value] else null
                 ShoppingItemAddEditDialog(
-                    item = editItemState.value,
+                    item = editItem,
                     onDismiss = { showItemDialogState.value = false },
-                    onAddItem = { shoppingItem ->
+                    onSubmit = { shoppingItem ->
                         showItemDialogState.value = false
-                        val newItem = shoppingItem.copy(position = lastAddedIndex.value)
+
                         val populatedItems = mutableListOf<ShoppingItem>()
                         populatedItems.addAll(listItems.value)
 
-                        if (editItemState.value.position != 0) {
-                            populatedItems.remove(editItemState.value)
+                        if (editItemIndex.value != -1) {
+                            populatedItems.removeAt(editItemIndex.value)
                         }
 
-                        populatedItems.add(newItem)
+                        populatedItems.add(shoppingItem)
                         listItems.value = populatedItems
 
-                        lastAddedIndex.value += 1
-
-                        editItemState.value = ShoppingItem()
+                        editItemIndex.value = -1
 
                     }
                 )
@@ -217,19 +217,24 @@ fun CreateListScreen(navController: NavController, shoppingListViewModel: Shoppi
                         }
 
                         LazyColumn() {
-                            items(listItems.value.size) {
+                            items(listItems.value.size) { index ->
                                 ShoppingItemListItem(
-                                    listItems.value[it],
+                                    listItems.value[index],
                                     onDeleteCallback = {
-                                        val populatedItems = mutableListOf<ShoppingItem>()
-                                        populatedItems.addAll(listItems.value)
 
-                                        val itemIndex = populatedItems.indexOfFirst { e -> e.position == listItems.value[it].position }
-                                        populatedItems.removeAt(itemIndex)
+                                        if (listItems.value[index].id.isNotBlank()) {
+                                            deletedItems.value = deletedItems.value + listItems.value[index]
+                                        }
+
+                                        val populatedItems = mutableListOf<ShoppingItem>()
+
+                                        populatedItems.addAll(listItems.value)
+                                        populatedItems.removeAt(index)
+
                                         listItems.value = populatedItems
                                     },
                                     onClickCallback = {
-                                        editItemState.value = listItems.value[it]
+                                        editItemIndex.value = index
                                         showItemDialogState.value = true
                                     }
                                 )
@@ -268,7 +273,7 @@ private fun ShoppingItemListItem(item: ShoppingItem, onDeleteCallback: () -> Uni
 @Composable
 fun ShoppingItemAddEditDialog(
     item: ShoppingItem? = null,
-    onAddItem: (ShoppingItem) -> Unit,
+    onSubmit: (ShoppingItem) -> Unit,
     onDismiss: () -> Unit
 ) {
     val nameState = remember {
@@ -301,7 +306,7 @@ fun ShoppingItemAddEditDialog(
                         .background(PrimaryLight),
                     contentAlignment = Alignment.Center) {
 
-                    Text(text = if (item != null) "Add New Item" else "Edit Item", style = MaterialTheme.typography.h6)
+                    Text(text = if (item != null) "Edit Item" else "Add New Item", style = MaterialTheme.typography.h6)
                 }
 
                 Column(modifier = Modifier
@@ -382,12 +387,16 @@ fun ShoppingItemAddEditDialog(
                                 nameErrorState.value = true
                             } else {
 
-                                val newItem = ShoppingItem(
+                                val newItem = if (item != null) item.copy(
+                                    name = nameState.value,
+                                    quantity = amountState.value,
+                                    unit = unitState.value)
+                                else ShoppingItem(
                                     name = nameState.value,
                                     quantity = amountState.value,
                                     unit = unitState.value
                                 )
-                                onAddItem(newItem)
+                                onSubmit(newItem)
                             }
                         }) {
                             Text(text = "Submit")
