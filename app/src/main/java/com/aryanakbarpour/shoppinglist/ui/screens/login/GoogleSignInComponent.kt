@@ -127,4 +127,3 @@ fun GoogleSignInButton(
 fun GoogleSignInButtonPreview() {
     GoogleSignInButton(onClick = {})
 }
-
