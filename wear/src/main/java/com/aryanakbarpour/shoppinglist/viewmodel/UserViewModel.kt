@@ -17,5 +17,4 @@ class UserViewModel @Inject constructor(private val repository: UserRepository) 
 
     fun getUserName() = repository.displayName
     fun getUserEmail() = repository.photoUrl
-
 }

@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -73,7 +74,11 @@ fun EmailLoginCard(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            Text(text = errorState.value ?: "", color = Color.Red, fontSize = 12.sp)
+            // Error message
+            Text(text = errorState.value ?: "",
+                color = Color.Red,
+                fontSize = 12.sp,
+                textAlign = TextAlign.Center)
 
             // Login Button
             Button(onClick = {
@@ -102,7 +107,7 @@ fun EmailLoginCard(
 fun EmailLoginCardPreview() {
     val emailState = remember { mutableStateOf(TextFieldValue(text = "")) }
     val passwordState = remember { mutableStateOf(TextFieldValue(text = "")) }
-    val errorState = remember { mutableStateOf<String?>(null) }
+    val errorState = remember { mutableStateOf<String?>("Error message") }
     val signInResult = remember { mutableStateOf<Response<Boolean>?>(null) }
 
     Surface(color = Color.White) {

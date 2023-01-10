@@ -1,25 +1,16 @@
 package com.aryanakbarpour.shoppinglist.viewmodel
 
-import android.util.Log
-import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
-import com.aryanakbarpour.shoppinglist.core.model.AppMode
 import com.aryanakbarpour.shoppinglist.core.model.ShoppingItem
 import com.aryanakbarpour.shoppinglist.core.model.ShoppingList
 import com.aryanakbarpour.shoppinglist.core.model.ShoppingListWithItems
 import com.aryanakbarpour.shoppinglist.core.service.ShoppingListRepository
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
-import java.util.UUID
 import javax.inject.Inject
-import javax.inject.Named
 
 interface ShoppingListViewModelInterface {
 

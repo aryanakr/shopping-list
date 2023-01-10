@@ -1,22 +1,16 @@
-package com.aryanakbarpour.shoppinglist.presentation.screens
+package com.aryanakbarpour.shoppinglist.presentation.screens.main_list
 
 import android.os.VibrationEffect
 import android.os.Vibrator
-import android.os.VibratorManager
 import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.*
-import androidx.compose.foundation.gestures.FlingBehavior
 import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
@@ -33,22 +27,19 @@ import androidx.navigation.NavController
 import androidx.wear.compose.material.*
 import com.aryanakbarpour.shoppinglist.core.model.Response
 import com.aryanakbarpour.shoppinglist.core.model.ShoppingList
+import com.aryanakbarpour.shoppinglist.presentation.screens.Screen
 import com.aryanakbarpour.shoppinglist.presentation.theme.Background
 import com.aryanakbarpour.shoppinglist.presentation.theme.Primary
-import com.aryanakbarpour.shoppinglist.presentation.theme.PrimaryDark
-import com.aryanakbarpour.shoppinglist.presentation.theme.PrimaryLight
 import com.aryanakbarpour.shoppinglist.viewmodel.ShoppingListViewModel
 import com.aryanakbarpour.shoppinglist.viewmodel.UserViewModel
 import com.guru.fontawesomecomposelib.FaIcon
 import com.guru.fontawesomecomposelib.FaIcons
-import kotlinx.coroutines.CoroutineScope
 
 import kotlinx.coroutines.launch
-import kotlin.math.sign
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun AllListsScreen(
+fun MainListScreen(
     navController: NavController,
     userViewModel: UserViewModel,
     shoppingListViewModel: ShoppingListViewModel,
@@ -128,7 +119,7 @@ fun AllListsScreen(
 
             items(shoppingListsState.value.size) { index ->
                 val shoppingList = shoppingListsState.value[index].shoppingList
-                DashboardListItem(shoppingList = shoppingList) {
+                MainListItem(shoppingList = shoppingList) {
                     navController.navigate(Screen.ViewListScreen.withArgs(shoppingList.id))
                 }
             }
@@ -152,61 +143,3 @@ fun AllListsScreen(
     }
 }
 
-@Composable
-fun SignOutDialog(
-    dialogState: MutableState<Boolean>,
-    onSubmit: () -> Unit
-) {
-    if (dialogState.value) {
-        Dialog(
-            onDismissRequest = { dialogState.value = false },
-            content = {
-                Box(modifier = Modifier
-                    .background(Color.Black),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text(
-                            modifier = Modifier
-                                .padding(horizontal = 24.dp)
-                                .fillMaxWidth(),
-                            text = "Are you sure you want to sign out?",
-                            style = TextStyle(color = Color.White, fontSize = 16.sp)
-                        )
-                        Spacer(modifier = Modifier.height(24.dp))
-                        Row {
-                            Text(text = "Cancel" , style = TextStyle(color = Primary, fontSize = 16.sp), modifier = Modifier.clickable {
-                                dialogState.value = false
-                            })
-                            Spacer(modifier = Modifier.width(20.dp))
-                            Text(text = "Sign Out" , style = TextStyle(color = Primary, fontSize = 16.sp), modifier = Modifier.clickable {
-                                onSubmit()
-                            })
-                        }
-                    }
-                }
-
-            },
-            properties = DialogProperties(
-                dismissOnBackPress = true,
-                dismissOnClickOutside = true
-            )
-        )
-    }
-}
-
-@Composable
-fun DashboardListItem(shoppingList: ShoppingList, onClick: () -> Unit) {
-
-    Chip(modifier = Modifier
-        .fillMaxWidth(),
-        label = {
-            Text(
-                text = shoppingList.name,
-                style = TextStyle(
-                    color = Color.Black,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.SemiBold),
-                    textAlign = TextAlign.Center)},
-        onClick = { onClick() })
-}

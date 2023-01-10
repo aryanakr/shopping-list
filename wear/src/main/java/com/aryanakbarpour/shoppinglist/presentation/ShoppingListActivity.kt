@@ -5,17 +5,14 @@ import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.navigation.NavController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import androidx.wear.compose.material.MaterialTheme
-import com.aryanakbarpour.shoppinglist.presentation.screens.AllListsScreen
-import com.aryanakbarpour.shoppinglist.presentation.screens.LoginScreen
 import com.aryanakbarpour.shoppinglist.presentation.screens.Screen
-import com.aryanakbarpour.shoppinglist.presentation.screens.ViewListScreen
+import com.aryanakbarpour.shoppinglist.presentation.screens.view_list.ViewListScreen
+import com.aryanakbarpour.shoppinglist.presentation.screens.main_list.MainListScreen
 import com.aryanakbarpour.shoppinglist.presentation.theme.ShoppingListTheme
 import com.aryanakbarpour.shoppinglist.viewmodel.ShoppingListViewModel
 import com.aryanakbarpour.shoppinglist.viewmodel.UserViewModel
@@ -35,11 +32,11 @@ class ShoppingListActivity : ComponentActivity() {
             ShoppingListTheme {
 
                 val navController = rememberNavController()
-                // A surface container using the 'background' color from the theme
-                NavHost(navController = navController, startDestination = Screen.AllListsScreen.route) {
 
-                    composable(Screen.AllListsScreen.route) {
-                        AllListsScreen(navController, userViewModel, shoppingListViewModel) {
+                NavHost(navController = navController, startDestination = Screen.MainListScreen.route) {
+
+                    composable(Screen.MainListScreen.route) {
+                        MainListScreen(navController, userViewModel, shoppingListViewModel) {
                             finish()
                         }
 
