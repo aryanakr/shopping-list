@@ -32,3 +32,6 @@ The WearOS smart watch application allows viewing the remote list and marking th
     <td><img src="screenshots/Screenshot_wear_list.png"></td>
   </tr>
  </table>
+ 
+ ---
+ Created by AryanAkr, 2023
