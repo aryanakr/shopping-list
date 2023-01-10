@@ -2,6 +2,8 @@ package com.aryanakbarpour.shoppinglist.core
 
 object Constants {
 
+    const val DATABASE_NAME = "shopping-list-db"
+
     //Names
     const val SIGN_IN_REQUEST = "signInRequest"
     const val SIGN_UP_REQUEST = "signUpRequest"

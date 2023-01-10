@@ -18,6 +18,9 @@ import com.aryanakbarpour.shoppinglist.core.model.AppMode
 import com.aryanakbarpour.shoppinglist.ui.screens.*
 import com.aryanakbarpour.shoppinglist.ui.theme.ShoppingListTheme
 import com.aryanakbarpour.shoppinglist.core.Constants
+import com.aryanakbarpour.shoppinglist.ui.screens.create_list.CreateListScreen
+import com.aryanakbarpour.shoppinglist.ui.screens.main_list.MainListScreen
+import com.aryanakbarpour.shoppinglist.ui.screens.view_list.ViewListScreen
 import com.aryanakbarpour.shoppinglist.viewmodel.ShoppingListViewModel
 import com.aryanakbarpour.shoppinglist.viewmodel.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -53,11 +56,16 @@ class ShoppingListActivity : ComponentActivity() {
 
                     NavHost(navController = navController, startDestination = Screen.MainListScreen.route) {
                         composable(Screen.MainListScreen.route) {
-                            MainListScreen(navController = navController, shoppingListViewModel= shoppingListViewModel, userViewModel = userViewModel, navigateToLogin = {
-                                getSharedPreferences(Constants.SHARED_PREFERENCE_NAME, MODE_PRIVATE).edit().putBoolean(
-                                    Constants.SKIP_LOGIN_PREF, false).apply()
-                                finish()
-                            } )
+                            MainListScreen(
+                                navController = navController,
+                                shoppingListViewModel= shoppingListViewModel,
+                                userViewModel = userViewModel,
+                                navigateToLogin = {
+                                    getSharedPreferences(Constants.SHARED_PREFERENCE_NAME, MODE_PRIVATE)
+                                        .edit().putBoolean(Constants.SKIP_LOGIN_PREF, false).apply()
+                                    finish()
+                                }
+                            )
                         }
                         composable(
                             route = Screen.ViewListScreen.route + "/{listId}",
@@ -66,10 +74,14 @@ class ShoppingListActivity : ComponentActivity() {
                                 nullable = false
                             })
                         ) { entry ->
-                            ViewListScreen(navController = navController, shoppingListViewModel= shoppingListViewModel, userViewModel = userViewModel, listId = entry.arguments?.getString("listId")!!)
+                            ViewListScreen(navController = navController,
+                                shoppingListViewModel= shoppingListViewModel,
+                                listId = entry.arguments?.getString("listId")!!
+                            )
                         }
                         composable(Screen.CreateListScreen.route) {
-                            CreateListScreen(navController = navController, shoppingListViewModel= shoppingListViewModel, userViewModel = userViewModel)
+                            CreateListScreen(navController = navController,
+                                shoppingListViewModel= shoppingListViewModel)
                         }
                         composable(
                             route = Screen.EditListScreen.route + "/{listId}",
@@ -79,7 +91,9 @@ class ShoppingListActivity : ComponentActivity() {
                                 nullable = true
                             })
                         ) { entry ->
-                            CreateListScreen(navController = navController, shoppingListViewModel= shoppingListViewModel, userViewModel = userViewModel, listId = entry.arguments?.getString("listId"))
+                            CreateListScreen(navController = navController,
+                                shoppingListViewModel= shoppingListViewModel,
+                                listId = entry.arguments?.getString("listId"))
                         }
                     }
 

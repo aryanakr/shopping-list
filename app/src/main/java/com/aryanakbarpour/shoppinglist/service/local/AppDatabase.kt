@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.aryanakbarpour.shoppinglist.core.Constants
 import com.aryanakbarpour.shoppinglist.core.model.ShoppingItem
 import com.aryanakbarpour.shoppinglist.core.model.ShoppingList
 
@@ -16,7 +17,7 @@ abstract class AppDatabase : RoomDatabase() {
         private var instance: AppDatabase? = null
         fun getInstance(context: Context): AppDatabase {
             if (instance == null) {
-                instance = Room.databaseBuilder(context, AppDatabase::class.java, "shopping-list-db")
+                instance = Room.databaseBuilder(context, AppDatabase::class.java, Constants.DATABASE_NAME)
                     .fallbackToDestructiveMigration()
                     .build()
             }

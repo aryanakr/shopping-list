@@ -54,7 +54,6 @@ class AuthRepositoryImpl @Inject constructor(
             val authResult = auth.signInWithCredential(googleCredential).await()
             val isNewUser = authResult.additionalUserInfo?.isNewUser ?: false
             if (isNewUser) {
-                print("kir")
                 addUserToFirestore()
             }
             Success(true)
@@ -81,12 +80,10 @@ class AuthRepositoryImpl @Inject constructor(
                 Success(true)
             }
             else {
-                Log.d("pest", "firebaseSignUpWithEmail: user already exists")
                 Failure(Exception("User already exists"))
             }
 
         } catch (e: Exception) {
-            Log.d("pest", "signup failure: ${e.message},,, ${e}")
             Failure(e)
         }
     }
@@ -115,6 +112,9 @@ class AuthRepositoryImpl @Inject constructor(
         }
     }
 
+    /**
+     * This method adds the user to firestore database
+     */
     private suspend fun addUserToFirestore(name: String? = null) {
         auth.currentUser?.apply {
             val user = User(

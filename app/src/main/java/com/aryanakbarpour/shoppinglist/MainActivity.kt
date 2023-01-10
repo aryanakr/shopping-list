@@ -16,6 +16,8 @@ import com.aryanakbarpour.shoppinglist.viewmodel.AuthViewModel
 import com.aryanakbarpour.shoppinglist.ui.screens.*
 import com.aryanakbarpour.shoppinglist.ui.theme.ShoppingListTheme
 import com.aryanakbarpour.shoppinglist.core.Constants
+import com.aryanakbarpour.shoppinglist.ui.screens.login.LoginScreen
+import com.aryanakbarpour.shoppinglist.ui.screens.signup.SignUpScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

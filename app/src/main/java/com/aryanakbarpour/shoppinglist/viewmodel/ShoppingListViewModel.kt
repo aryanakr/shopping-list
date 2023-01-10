@@ -81,7 +81,8 @@ class ShoppingListViewModel @Inject internal constructor(
 
     override fun archiveList(shoppingList: ShoppingListWithItems) {
         ioScope.launch {
-            val newList = shoppingList.shoppingList.copy(isArchived = true)
+            val currentState = shoppingList.shoppingList.isArchived
+            val newList = shoppingList.shoppingList.copy(isArchived = !currentState)
             shoppingRepo.updateShoppingList(newList)
         }
     }
@@ -97,7 +98,6 @@ class ShoppingListViewModel @Inject internal constructor(
     override fun deleteShoppingItems(items: List<ShoppingItem>) {
         ioScope.launch {
             items.forEach {
-                Log.d("kir", "deleteShoppingItems: ${it.id}")
                 shoppingRepo.deleteShoppingItem(it)
             }
         }
@@ -105,43 +105,42 @@ class ShoppingListViewModel @Inject internal constructor(
 
 }
 
-fun getTestShoppingListViewModel() : ShoppingListViewModelInterface {
-    return object : ShoppingListViewModelInterface {
-        override val shoppingListsFlow: Flow<List<ShoppingListWithItems>>
-            get() = flowOf(
-                listOf(
-                    ShoppingListWithItems(ShoppingList(UUID.randomUUID().toString(), "test"), listOf(ShoppingItem(name = "test item 1", quantity = "3", unit = "kg"), ShoppingItem(name = "test item 2", quantity = "3", unit = "kg"))),
-                    ShoppingListWithItems(ShoppingList(UUID.randomUUID().toString(), "test2"), listOf(ShoppingItem(name = "test item 1", quantity = "2", unit = "kg"), ShoppingItem(name = "test item 2", quantity = "3", unit = "kg"))),
-                    ShoppingListWithItems(ShoppingList(UUID.randomUUID().toString(), "test3"), listOf(ShoppingItem(name = "test item 1", quantity = "1", unit = "kg"), ShoppingItem(name = "test item 2", quantity = "3", unit = "kg")))
-                )
+class TestShoppingListViewModel() : ShoppingListViewModelInterface {
+    override val shoppingListsFlow: Flow<List<ShoppingListWithItems>>
+        get() = flowOf(
+            listOf(
+                ShoppingListWithItems(ShoppingList(UUID.randomUUID().toString(), "test"), listOf(ShoppingItem(name = "test item 1", quantity = "3", unit = "kg"), ShoppingItem(name = "test item 2", quantity = "3", unit = "kg"))),
+                ShoppingListWithItems(ShoppingList(UUID.randomUUID().toString(), "test2"), listOf(ShoppingItem(name = "test item 1", quantity = "2", unit = "kg"), ShoppingItem(name = "test item 2", quantity = "3", unit = "kg"))),
+                ShoppingListWithItems(ShoppingList(UUID.randomUUID().toString(), "test3"), listOf(ShoppingItem(name = "test item 1", quantity = "1", unit = "kg"), ShoppingItem(name = "test item 2", quantity = "3", unit = "kg")))
             )
+        )
 
-        override fun addShoppingList(shoppingList: ShoppingListWithItems) {return }
+    override fun addShoppingList(shoppingList: ShoppingListWithItems) {return }
 
-        override fun updateShoppingList(shoppingList: ShoppingListWithItems) {}
+    override fun updateShoppingList(shoppingList: ShoppingListWithItems) {}
 
-        override fun deleteShoppingList(shoppingList: ShoppingListWithItems) {}
+    override fun deleteShoppingList(shoppingList: ShoppingListWithItems) {}
 
 
-        override fun updateShoppingItem(shoppingItem: ShoppingItem) {
-            TODO("Not yet implemented")
-        }
-
-        override fun archiveList(shoppingList: ShoppingListWithItems) {
-            TODO("Not yet implemented")
-        }
-
-        override fun getShoppingList(id: String): Flow<ShoppingList> {
-            TODO("Not yet implemented")
-        }
-
-        override fun getShoppingListItems(listId: String): Flow<List<ShoppingItem>> {
-            TODO("Not yet implemented")
-        }
-
-        override fun deleteShoppingItems(items: List<ShoppingItem>) {
-            TODO("Not yet implemented")
-        }
-
+    override fun updateShoppingItem(shoppingItem: ShoppingItem) {
+        TODO("Not yet implemented")
     }
+
+    override fun archiveList(shoppingList: ShoppingListWithItems) {
+        TODO("Not yet implemented")
+    }
+
+    override fun getShoppingList(id: String): Flow<ShoppingList> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getShoppingListItems(listId: String): Flow<List<ShoppingItem>> {
+        TODO("Not yet implemented")
+    }
+
+    override fun deleteShoppingItems(items: List<ShoppingItem>) {
+        TODO("Not yet implemented")
+    }
+
+
 }
