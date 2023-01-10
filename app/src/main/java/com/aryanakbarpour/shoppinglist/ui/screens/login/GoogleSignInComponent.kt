@@ -19,7 +19,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.aryanakbarpour.shoppinglist.R
+import com.aryanakbarpour.shoppinglist.core.R
 import com.aryanakbarpour.shoppinglist.core.model.Response
 import com.aryanakbarpour.shoppinglist.viewmodel.AuthViewModel
 import com.google.android.gms.auth.api.identity.BeginSignInResult

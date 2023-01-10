@@ -25,7 +25,6 @@ interface ShoppingListViewModelInterface {
     fun updateShoppingItem(shoppingItem: ShoppingItem)
     fun archiveList(shoppingList: ShoppingListWithItems)
 
-    fun getShoppingList(id: String): Flow<ShoppingList>
     fun getShoppingListItems(listId: String): Flow<List<ShoppingItem>>
     fun deleteShoppingItems(items: List<ShoppingItem>)
 
@@ -87,10 +86,6 @@ class ShoppingListViewModel @Inject internal constructor(
         }
     }
 
-    override fun getShoppingList(id: String): Flow<ShoppingList> {
-        TODO("Not yet implemented")
-    }
-
     override fun getShoppingListItems(listId: String): Flow<List<ShoppingItem>> {
         return shoppingRepo.getShoppingListItems(listId)
     }
@@ -127,10 +122,6 @@ class TestShoppingListViewModel() : ShoppingListViewModelInterface {
     }
 
     override fun archiveList(shoppingList: ShoppingListWithItems) {
-        TODO("Not yet implemented")
-    }
-
-    override fun getShoppingList(id: String): Flow<ShoppingList> {
         TODO("Not yet implemented")
     }
 
