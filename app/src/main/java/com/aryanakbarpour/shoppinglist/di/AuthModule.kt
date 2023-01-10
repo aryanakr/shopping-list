@@ -2,7 +2,7 @@ package com.aryanakbarpour.shoppinglist.di
 
 import android.app.Application
 import android.content.Context
-import com.aryanakbarpour.shoppinglist.R
+import com.aryanakbarpour.shoppinglist.core.R
 import com.aryanakbarpour.shoppinglist.core.service.AuthRepository
 import com.aryanakbarpour.shoppinglist.core.service.UserRepository
 import com.aryanakbarpour.shoppinglist.service.remote.*

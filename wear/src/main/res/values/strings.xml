@@ -1,10 +1,3 @@
 <resources>
     <string name="app_name">Shopping List</string>
-    <!--
-    This string is used for square devices and overridden by hello_world in
-    values-round/strings.xml for round devices.
-    -->
-    <string name="hello_world">From the Square world,\nHello, %1$s!</string>
-
-    <string name="web_client_id">160436818811-33knusq8tje8f5b7fu2cmdqm8fpqn0f8.apps.googleusercontent.com</string>
 </resources>
